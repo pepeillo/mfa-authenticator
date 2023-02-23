@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
+        android:orientation="vertical">
+
+    <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_label"/>
+
+    <EditText
+            android:id="@+id/txtLabel"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_account"/>
+
+    <EditText
+            android:id="@+id/txtAccount"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_issuer"/>
+
+    <EditText
+            android:id="@+id/txtIssuer"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_algorithm"/>
+    <Spinner
+            android:id="@+id/spnAlgorithm"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/algorithms"/>
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_period"/>
+    <Spinner
+            android:id="@+id/spnPeriod"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/periods"/>
+
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_digits"/>
+
+    <EditText
+            android:id="@+id/txtDigits"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:inputType="number"
+            android:maxLength="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_secret"/>
+    <EditText
+            android:id="@+id/txtSecret"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="20dp"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <Switch
+            android:id="@+id/chkFavourite"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_favourite" tools:ignore="MissingClass,UseSwitchCompatOrMaterialXml"/>
+
+    <ImageView
+            android:id="@+id/imgQR"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="250dp"
+            android:layout_height="250dp" />
+</LinearLayout>

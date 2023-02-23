@@ -1,0 +1,31 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/zxing_custom_viewfinder_laser</item>
+        <item name="android:windowBackground">@android:color/background_dark</item>
+
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--item name="android:statusBarColor">@android:color/transparent</item-->
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        //replace with your own desired color
+        <item name="background">@color/design_default_color_primary</item>
+    </style>
+</resources>

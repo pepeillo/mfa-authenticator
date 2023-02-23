@@ -1,0 +1,77 @@
+<resources>
+    <string name="menu_delete">Borrar</string>
+    <string name="menu_edit">Editar</string>
+    <string name="menu_scan">Escanear QR</string>
+    <string name="menu_about">Acerca de</string>
+    <string name="msg_invalid_qr_code">El QR no es válido</string>
+    <string name="msg_account_added">Cuenta añadida</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_save">Guardar</string>
+    <string name="msg_confirm_delete">¿Estás seguro de que quieres borrar esta cuenta?</string>
+    <string name="msg_account_removed">Cuenta borrada.</string>
+    <string name="button_add">Añadir</string>
+    <string name="button_remove">Borrar</string>
+    <string name="msg_camera_permission">CNo hay permisos sobre la cámara</string>
+    <string name="mag_not_removed_locked">El elemento está catalogado como favorito. No se puede borrar.</string>
+    <string name="str_algorithm">Algoritmo</string>
+    <string name="str_accept">Aceptar</string>
+    <string name="str_favourite">Cuenta favorita</string>
+
+    <string-array name="algorithms">
+        <item>SHA1</item>
+        <item>SHA256</item>
+        <item>SHA512</item>
+    </string-array>
+    <string-array name="periods">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+    <string name="str_label">Etiqueta</string>
+    <string name="str_account">Cuenta</string>
+    <string name="str_issuer">Emisor</string>
+    <string name="str_period">Duración del número</string>
+    <string name="str_digits">Número de dígitos</string>
+    <string name="str_secret">Código secreto</string>
+    <string name="login_failed">Credenciales incorrectas.</string>
+    <string name="use_password">Usar contraseña</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="bioAuth">Autenticación biométrica</string>
+    <string name="bioAuthSub">Conectar usando la huella dactilar</string>
+    <string name="settings">Configuración</string>
+    <string name="security">Seguridad</string>
+    <string name="usebiometric.title">Usar autenticación biométrica</string>
+    <string name="usebiometric.on">Para abrir la aplicación será necesaria la autenticación biométrica.</string>
+    <string name="usebiometric.off">La aplicación se abrirá sin autenticación. Será necesaria la contraseña para
+        acceder.
+    </string>
+    <string name="copied_to_clipboard">Copiado al portapapeles.</string>
+    <string name="behaviour">Comportamiento</string>
+    <string name="copyclipboard.title">Copiar el número al portapapeles</string>
+    <string name="copyclipboard.on">El número se copiará al portapapeles cuando se seleccione el elemento.</string>
+    <string name="copyclipboard.off">El número no se copiará al portapapeles cuando se seleccione el elemento.
+    </string>
+    <string name="perform_export">Export las cuentas a un fichero.</string>
+    <string name="export_summary">Realizar una exportación de todas las cuentas ahora.</string>
+    <string name="category_import_export">Importación / Exportación</string>
+    <string name="perform_import">Importar las cuentas de un fichero.</string>
+    <string name="import_summary">Importar las cuentas de un fichero.</string>
+    <string name="cmdexport">Exportar</string>
+    <string name="cmdimport">Importar</string>
+    <string name="pwd_not_match">Las contraseñas no coinciden</string>
+    <string name="enter_pwd">Introduzca la contraseña para acceder.</string>
+    <string name="prompt_password2">Repetir contraseña</string>
+    <string name="enter_pwd_new">Introduzca su contraseña y repítala para acceder. Desde ese momento, esa será su
+        contraseña de entrada y los ficheros de datos se encriptarán con ella.
+    </string>
+    <string name="export_to_encrypted">Vas a exportar las cuentas existentes a un fichero encriptado. ¿Quieres
+        continuar?
+    </string>
+    <string name="import_from_encrypted">Vas a importar las cuentas existentes d un fichero encriptado ¿Quieres
+        continuar?.
+    </string>
+    <string name="select_a_file">Selecciona un fichero</string>
+    <string name="or_biometric">o <a href="">conectar usando biometría</a></string>
+    <string name="acknowledgments">Agradecimientos</string>
+
+</resources>

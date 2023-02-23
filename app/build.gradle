@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 31
+    buildToolsVersion "29.0.2"
+
+    signingConfigs {
+        release {
+            storeFile file("keystore")
+            storePassword "keystore_password"
+            keyAlias "key_alias"
+            keyPassword "key_password"
+        }
+    }
+
+    defaultConfig {
+        applicationId "es.jaf.otp_authenticator"
+        minSdkVersion 28
+        targetSdkVersion 28
+        versionCode 3
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            //shrinkResources true
+            //useProguard true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+          abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.journeyapps:zxing-android-embedded:3.1.0@aar'
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.github.woxthebox:draglistview:1.7.2'
+    implementation "androidx.biometric:biometric:1.1.0"
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'commons-codec:commons-codec:1.11'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+}
+
+if (project.hasProperty("myproject.properties")) {
+    Properties props = new Properties()
+    def propFile = file(project.property("myproject.properties"))
+    if (propFile.canRead()) {
+        props.load(new FileInputStream(propFile))
+
+        if (props != null
+                && props.containsKey('keystore')
+                && props.containsKey('keystore_password')
+                && props.containsKey('key_alias')
+                && props.containsKey('key_password')) {
+
+            android.signingConfigs.release.storeFile = file(props['keystore'])
+            android.signingConfigs.release.storePassword = props['keystore_password']
+            android.signingConfigs.release.keyAlias = props['key_alias']
+            android.signingConfigs.release.keyPassword = props['key_password']
+        } else {
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+}
