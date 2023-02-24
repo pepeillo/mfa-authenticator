@@ -2,3 +2,4 @@
 /.gradle/
 /app/build/
 /app/build/intermediates/javac/release/classes/
+/build/intermediates/lint-cache/maven.google/com/google/android/material/group-index.xml
