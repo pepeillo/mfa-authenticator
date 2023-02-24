@@ -3,6 +3,7 @@
               android:orientation="vertical"
               android:layout_width="375dp"
               android:layout_height="320dp"
+              android:layout_gravity="center"
               android:background="@android:color/background_light"
               android:padding="10dp" >
 
@@ -15,17 +16,20 @@
     <TextView android:text="2FAuth 1.0.0"
               android:textAppearance="?android:attr/textAppearanceLarge"
               android:gravity="center"
+              android:layout_gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" />
 
     <TextView android:text="By José Antonio Férriz"
               android:textAppearance="?android:attr/textAppearanceMedium"
+              android:layout_gravity="center"
               android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" />
 
     <TextView android:text="Based on OTP authenticator (by Bruno Bierbaumer)"
               android:textAppearance="?android:attr/textAppearanceSmall"
+              android:layout_gravity="center"
               android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" />
@@ -33,6 +37,7 @@
     <TextView android:text="@string/acknowledgments"
               android:textAppearance="?android:attr/textAppearanceMedium"
               android:layout_marginTop="20dp"
+              android:layout_gravity="center"
               android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" />
@@ -43,6 +48,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:clickable="true"
             android:textColorLink="#0580E1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -53,6 +59,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:clickable="true"
             android:textColorLink="#0580E1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -63,6 +70,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:clickable="true"
             android:textColorLink="#0580E1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -73,6 +81,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:clickable="true"
             android:textColorLink="#0580E1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -83,6 +92,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:clickable="true"
             android:textColorLink="#0580E1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
