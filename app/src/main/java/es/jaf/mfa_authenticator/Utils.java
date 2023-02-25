@@ -17,6 +17,8 @@
 package es.jaf.mfa_authenticator;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
     public static byte[] readFully(File file) throws IOException {
@@ -46,5 +48,44 @@ public class Utils {
 
     public static void writeFully(OutputStream os, byte[] data) throws IOException {
         os.write(data);
+    }
+
+    static void saveException(String text, Exception ex) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        FileOutputStream f = null;
+        PrintWriter pw = null;
+        try {
+            File root = android.os.Environment.getExternalStorageDirectory();
+            File dir = new File(root.getAbsolutePath() + "/" + BuildConfig.APPLICATION_ID);
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    return;
+                }
+            }
+            File file = new File(dir, "exceptions.txt");
+            f = new FileOutputStream(file, true);
+            pw = new PrintWriter(f);
+            pw.println(sdf.format(new Date()) + "\t" + text);
+            if (ex != null) {
+                pw.println(sdf.format(new Date()) + "\t" + "Message:" + ex.getMessage());
+                ex.printStackTrace(pw);
+            }
+            pw.flush();
+            pw.close();
+            f.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (pw != null) {
+                pw.flush();
+                pw.close();
+            }
+            if (f != null) {
+                try {
+                    f.close();
+                } catch (Exception e) {/**/}
+            }
+        }
     }
 }

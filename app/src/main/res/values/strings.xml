@@ -28,6 +28,43 @@
     <string name="prompt_password">Password</string>
     <string name="bioAuth">Biometric Authentication</string>
     <string name="bioAuthSub">Login using fingerprint authentication</string>
+    <string name="settings">Settings</string>
+    <string name="security">Security</string>
+    <string name="usebiometric.title">Use biometric authentication</string>
+    <string name="usebiometric.on">Biometric authentication will be required to open application.</string>
+    <string name="usebiometric.off">The application will be opened without authentication.</string>
+    <string name="copied_to_clipboard">Copied to clipboard.</string>
+    <string name="behaviour">Behaviour</string>
+    <string name="copyclipboard.title">Copy the number to clipboard</string>
+    <string name="copyclipboard.on">The number will be copied to clipboard when tap the account.</string>
+    <string name="copyclipboard.off">The number won\'t be copied to clipboard when tap the account.</string>
+    <string name="perform_export">Export accounts to a file.</string>
+    <string name="export_summary">Perform an export of all accounts now.</string>
+    <string name="category_import_export">Import / Export</string>
+    <string name="perform_import">Import account from a file.</string>
+    <string name="import_summary">Perform an import of accounts from a file.</string>
+    <string name="cmdexport">Export</string>
+    <string name="cmdimport">Import</string>
+    <string name="pwd_not_match">Passwords does not match.</string>
+    <string name="enter_pwd">Enter your password to access.</string>
+    <string name="prompt_password2">Repeat password</string>
+    <string name="enter_pwd_new">Enter your password and repeat it to access. From that moment on, that will be your input password and the data files will be encrypted with it.</string>
+    <string name="export_to_encrypted">You are going to export all accounts to an encrypted file. Are you sure?</string>
+    <string name="select_a_file">Select a file</string>
+    <string name="import_from_encrypted">You are going to import accounts from an encrypted file. Are you sure?</string>
+    <string name="link_bierbaumer" translatable="false"><a href="https://github.com/0xbb">Bruno Bierbaumer</a></string>
+    <string name="link_commons_codec" translatable="false"><a href="https://commons.apache.org/proper/commons-codec/">Apache Commons Codec</a></string>
+    <string name="link_zxing" translatable="false"><a href="https://github.com/zxing/zxing">ZXing</a></string>
+    <string name="link_zxing_embedded" translatable="false"><a href="https://github.com/journeyapps/zxing-android-embedded">ZXing Android Embedded</a></string>
+    <string name="link_draglistview" translatable="false"><a href="https://github.com/woxblom/DragListView">DragListView</a></string>
+    <string name="or_biometric">or <a href="">connect using biometrics</a></string>
+    <string name="acknowledgments">Acknowledgments</string>
+    <string name="err_loading_accounts">Error loading accounts.</string>
+    <string name="err_dropping_account">Error dropping account.</string>
+    <string name="err_editing_account">Error editing account.</string>
+    <string name="err_importing_accounts">Error importing accounts.</string>
+    <string name="err_deleting_account">Error deleting account.</string>
+
 
     <string-array name="algorithms">
         <item>SHA1</item>
@@ -40,40 +77,4 @@
         <item>60</item>
     </string-array>
 
-
-    <string name="settings">Settings</string>
-    <string name="security">Security</string>
-    <string name="usebiometric.title">Use biometric authentication</string>
-    <string name="usebiometric.on">Biometric authentication will be required to open application.</string>
-    <string name="usebiometric.off">The application will be opened without authentication.</string>
-    <string name="copied_to_clipboard">Copied to clipboard.</string>
-    <string name="behaviour">Behaviour</string>
-    <string name="copyclipboard.title">Copy the number to clipboard</string>
-    <string name="copyclipboard.on">The number will be copied to clipboard when tap the item.</string>
-    <string name="copyclipboard.off">The number won\'t be copied to clipboard when tap the item.</string>
-    <string name="perform_export">Export accounts to a file.</string>
-    <string name="export_summary">Perform an export of all accounts now.</string>
-    <string name="category_import_export">Import / Export</string>
-    <string name="perform_import">Import account from a file.</string>
-    <string name="import_summary">Import accounts from a file.</string>
-    <string name="cmdexport">Export</string>
-    <string name="cmdimport">Import</string>
-    <string name="pwd_not_match">Passwords does not match.</string>
-    <string name="enter_pwd">Enter your password to access.</string>
-    <string name="prompt_password2">Repeat password</string>
-    <string name="enter_pwd_new">Enter your password and repeat it to access. From that moment on, that will be your
-        input password and the data files will be encrypted with it.
-    </string>
-    <string name="export_to_encrypted">You are going to export all accounts to an encrypted file. Are you sure?</string>
-    <string name="select_a_file">Select a file</string>
-    <string name="import_from_encrypted">You are going to import accounts from an encrypted file. Are you sure?</string>
-
-    <string name="link_bierbaumer" translatable="false"><a href="https://github.com/0xbb">Bruno Bierbaumer</a></string>
-    <string name="link_commons_codec" translatable="false"><a href="https://commons.apache.org/proper/commons-codec/">Apache Commons Codec</a></string>
-    <string name="link_zxing" translatable="false"><a href="https://github.com/zxing/zxing">ZXing</a></string>
-    <string name="link_zxing_embedded" translatable="false"><a href="https://github.com/journeyapps/zxing-android-embedded">ZXing Android Embedded</a></string>
-    <string name="link_draglistview" translatable="false"><a href="https://github.com/woxblom/DragListView">DragListView</a></string>
-    <string name="or_biometric">or <a href="">connect using biometrics</a>
-    </string>
-    <string name="acknowledgments">Acknowledgments</string>
 </resources>

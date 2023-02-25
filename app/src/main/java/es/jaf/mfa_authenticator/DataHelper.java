@@ -48,7 +48,7 @@ public class DataHelper {
             try {
                 a.put(e.toJSON());
             } catch (JSONException e1) {
-                //nothing
+                Utils.saveException("Converting to json " + e, e1);
             }
         }
         String pwd = context.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE).getString("pwd", null);

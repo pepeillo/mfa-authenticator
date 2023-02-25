@@ -41,6 +41,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
     DragListView listView;
 
     private static final int PERMISSIONS_REQUEST_CAMERA = 42;
+    private static final int ACTION_EDIT = 102;
+    private static final int ACTION_SETTINGS = 103;
     private ActionMode actionMode;
     private View viewLongClicked;
     private Handler handlerRow;
@@ -103,7 +105,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
         try {
             entries = DataHelper.load(this);
         } catch (Exception e) {
-            Snackbar.make(floatingButton, "Error loading accounts. " + e, Snackbar.LENGTH_LONG).show();
+            Utils.saveException("Loading accounts.", e);
+            Snackbar.make(floatingButton, R.string.err_loading_accounts, Snackbar.LENGTH_LONG).show();
         }
 
         listView = findViewById(R.id.listView);
@@ -120,7 +123,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                         DataHelper.store(EntriesActivity.this, entries);
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
-                        Snackbar.make(floatingButton, "Error droping account. " + e, Snackbar.LENGTH_LONG).show();
+                        Utils.saveException("Dropping account", e);
+                        Snackbar.make(floatingButton, R.string.err_dropping_account, Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
@@ -139,7 +143,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == 102) {
+        if (requestCode == ACTION_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
                 EntryObject entry = nextSelection.second;
                 entry.setLabel(intent.getStringExtra("label"));
@@ -152,7 +156,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                 try {
                     DataHelper.store(this, entries);
                 } catch (Exception e) {
-                    Snackbar.make(floatingButton, "Error editing account. " + e, Snackbar.LENGTH_LONG).show();
+                    Utils.saveException("Editing account", e);
+                    Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
                 }
                     adapter.notifyDataSetChanged();
                 if (actionMode != null) {
@@ -161,12 +166,13 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             }
             return;
         }
-        if (requestCode == 103) {
+        if (requestCode == ACTION_SETTINGS) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     entries = DataHelper.load(this);
                 } catch (Exception e) {
-                    Snackbar.make(floatingButton, "Error loading accounts. " + e, Snackbar.LENGTH_LONG).show();
+                    Utils.saveException("Importing accounts", e);
+                    Snackbar.make(floatingButton, R.string.err_importing_accounts, Snackbar.LENGTH_LONG).show();
                 }
                 adapter.setItemList(entries);
                 adapter.notifyDataSetChanged();
@@ -255,7 +261,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             return true;
         }
         if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(EntriesActivity.this, SettingsActivity.class), 103);
+            startActivityForResult(new Intent(EntriesActivity.this, SettingsActivity.class), ACTION_SETTINGS);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -302,7 +308,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                             }
                         }).show();
                     } catch (Exception e) {
-                        Snackbar.make(floatingButton, "Error deleting account. " + e, Snackbar.LENGTH_LONG).show();
+                        Utils.saveException("Deleting account.", e);
+                        Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
                     }
                     adapter.notifyDataSetChanged();
                     actionMode.finish();
@@ -346,7 +353,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             intent.putExtra("digits", entry.getDigits());
             intent.putExtra("locked", entry.isLocked());
             intent.putExtra("secret", new String(new Base32().encode(entry.getSecret())));
-            startActivityForResult(intent, 102);
+            startActivityForResult(intent, ACTION_EDIT);
             return true;
         }
         return false;

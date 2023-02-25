@@ -10,13 +10,10 @@
             android:name="es.jaf.mfa_authenticator.MyApplication"
             android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
+            android:requestLegacyExternalStorage="true"
             android:label="@string/app_name"
             android:supportsRtl="true">
-        <activity
-                android:name="es.jaf.mfa_authenticator.EntriesActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
         <activity
                 android:name="es.jaf.mfa_authenticator.MainActivity"
                 android:label="@string/app_name"
@@ -28,16 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+                android:name="es.jaf.mfa_authenticator.EntriesActivity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
                 android:name="es.jaf.mfa_authenticator.EntryActivity"
                 android:label="@string/menu_edit"
-                android:theme="@style/AppTheme">
-        </activity>
+                android:theme="@style/AppTheme" />
+
         <activity
                 android:name="es.jaf.mfa_authenticator.SettingsActivity"
                 android:label="@string/settings"
-                android:theme="@style/AppTheme">
-        </activity>
+                android:theme="@style/AppTheme" />
+
         <activity
                 android:name="es.jaf.mfa_authenticator.CaptureActivityAnyOrientation"
                 android:screenOrientation="fullSensor"

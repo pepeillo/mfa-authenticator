@@ -76,7 +76,7 @@ public class EncryptionHelper {
                 writeFully(keyFile, wrapped);
             }
         } catch (Exception e) {
-            //Nothing
+            Utils.saveException("Generating keys of file " + keyFile, e);
         }
         // Even if we just generated the key, always read it back to ensure we
         // can read it successfully.
@@ -95,8 +95,7 @@ public class EncryptionHelper {
             return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Utils.saveException("Getting secret key", e);
             throw new IOException(e);
         }
 

@@ -47,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
                     ArrayList<Pair<Integer, EntryObject>> entries = DataHelper.load(this);
                     DataHelper.exportFile(this, entries, os, true);
                 } catch (Exception e) {
+                    Utils.saveException("Exporting file", e);
                     Toast.makeText(this, "Error exporting file. " + e, Toast.LENGTH_SHORT).show();
                 } finally {
                     if (os != null) {
@@ -69,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
                     entries.addAll(DataHelper.importFile(this, is, true));
                     DataHelper.store(this, entries);
                 } catch (Exception e) {
+                    Utils.saveException("Importing file", e);
                     Toast.makeText(this, "Error importing file. " + e, Toast.LENGTH_SHORT).show();
                 } finally {
                     if (is != null) {

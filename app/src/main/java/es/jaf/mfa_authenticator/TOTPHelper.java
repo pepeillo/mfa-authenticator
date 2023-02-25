@@ -49,10 +49,8 @@ public class TOTPHelper {
             truncatedHash %= Math.pow(10,digits);
 
             r  = (int) truncatedHash;
-        }
-
-        catch(Exception e){
-            //Nothing
+        } catch(Exception e){
+            Utils.saveException("Error generating TOTP", e);
         }
 
         return r;

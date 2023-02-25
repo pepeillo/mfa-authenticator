@@ -173,7 +173,7 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
             }
             return bitmap;
         } catch (Exception e) {
-            e.printStackTrace();
+            Utils.saveException("Loading QR image", e);
         }
         return null;
     }

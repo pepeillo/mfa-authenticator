@@ -98,7 +98,7 @@ public class EntryObject {
         try {
             this.setDigits(Integer.parseInt(jsonObj.getString(JSON_DIGITS)));
         } catch (Exception e) {
-            this.setDigits(30);
+            this.setDigits(6);
         }
         this.setLocked("true".equals(jsonObj.getString(JSON_LOCKED)));
         this.setSecret(new Base32().decode(jsonObj.getString(JSON_SECRET)));
