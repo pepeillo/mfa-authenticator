@@ -108,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (hasBiometric && pwdSaved) {
+            if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean("use_biometric", false)) {
+                findViewById(R.id.cmdBiometric).setVisibility(View.VISIBLE);
+                withBiometric();
+            }
+        }
+    }
+
     private void withBiometric() {
         //init bio metric
         Executor executor = ContextCompat.getMainExecutor(this);
