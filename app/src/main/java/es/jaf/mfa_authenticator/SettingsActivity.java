@@ -20,6 +20,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
+    private static final int ACTION_EXPORT = 123;
+    private static final int ACTION_IMPORT = 124;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == RESULT_OK && requestCode == 123) {
+        if (resultCode == RESULT_OK && requestCode == ACTION_EXPORT) {
             Uri uri = data.getData();
             if (uri != null) {
                 OutputStream os = null;
@@ -60,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
 
-        } else if (resultCode == RESULT_OK && requestCode == 124) {
+        } else if (resultCode == RESULT_OK && requestCode == ACTION_IMPORT) {
             Uri uri = data.getData();
             if (uri != null) {
                 InputStream is = null;
