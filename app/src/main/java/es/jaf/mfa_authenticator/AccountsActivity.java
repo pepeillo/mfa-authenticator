@@ -213,6 +213,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
                     super.onCreate(savedInstanceState);
                     setContentView(R.layout.about_dialog);
 
+                    ((TextView)findViewById(R.id.txtappname)).setText(getText(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
                     findViewById(R.id.bierbaumer).setOnClickListener(view -> {
                         Uri uri = Uri.parse("https://github.com/0xbb");
                         startActivity(new Intent(Intent.ACTION_VIEW, uri));

@@ -10,15 +10,12 @@ public class TOTPHelper {
     public static final String SHA512 = "HmacSHA512";
 
     public static String generate(byte[] secret, int digits, String algorithm) {
-        return String.format("%06d", generate(secret, digits, System.currentTimeMillis() / 1000, algorithm));
-    }
-
-    private static int generate(byte[] key, int digits, long t, String algorithm) {
-        int r = 0;
+        long currentMillis = System.currentTimeMillis() / 1000;
+        int result = 0;
         try {
-            t /= 30;
+            currentMillis /= 30;
             byte[] data = new byte[8];
-            long value = t;
+            long value = currentMillis;
             for (int i = 8; i-- > 0; value >>>= 8) {
                 data[i] = (byte) value;
             }
@@ -31,11 +28,10 @@ public class TOTPHelper {
             } else {
                 alg = SHA1;
             }
-            SecretKeySpec signKey = new SecretKeySpec(key, alg);
+            SecretKeySpec signKey = new SecretKeySpec(secret, alg);
             Mac mac = Mac.getInstance(alg);
             mac.init(signKey);
             byte[] hash = mac.doFinal(data);
-
 
             int offset = hash[20 - 1] & 0xF;
 
@@ -48,11 +44,11 @@ public class TOTPHelper {
             truncatedHash &= 0x7FFFFFFF;
             truncatedHash %= Math.pow(10,digits);
 
-            r  = (int) truncatedHash;
+            result  = (int) truncatedHash;
         } catch(Exception e){
             Utils.saveException("Error generating TOTP", e);
         }
 
-        return r;
+        return String.format("%0" + digits + "d",result);
     }
 }
