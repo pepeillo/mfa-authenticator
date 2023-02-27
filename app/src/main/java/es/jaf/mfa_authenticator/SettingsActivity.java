@@ -62,8 +62,10 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
             }
+            return;
+        }
 
-        } else if (resultCode == RESULT_OK && requestCode == ACTION_IMPORT) {
+        if (resultCode == RESULT_OK && requestCode == ACTION_IMPORT) {
             Uri uri = data.getData();
             if (uri != null) {
                 InputStream is = null;
@@ -92,8 +94,6 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
-            //findPreference("resetBD").setOnPreferenceClickListener(preference1 -> {return true;});*/
         }
     }
 
