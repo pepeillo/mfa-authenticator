@@ -98,21 +98,5 @@ public class EncryptionHelper {
             Utils.saveException("Getting secret key", e);
             throw new IOException(e);
         }
-
-    }
-
-    public static byte[] generateSecretBase32(int numDigits) {
-        StringBuilder sb = new StringBuilder(numDigits);
-        Random random = new SecureRandom();
-        for (int i = 0; i < numDigits; i++) {
-            int val = random.nextInt(32);
-            if (val < 26) {
-                sb.append((char) ('A' + val));
-            } else {
-                sb.append((char) ('2' + (val - 26)));
-            }
-        }
-        Log.d("xxxxxxxxxx", sb.toString());
-        return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 }

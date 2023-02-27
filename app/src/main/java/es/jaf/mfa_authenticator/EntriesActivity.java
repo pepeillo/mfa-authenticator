@@ -95,12 +95,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
         setSupportActionBar(toolbar);
 
         floatingButton = findViewById(R.id.action_scan);
-        floatingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EntriesActivity.this.scanQRCode();
-            }
-        });
+        floatingButton.setOnClickListener(view -> EntriesActivity.this.scanQRCode());
 
         try {
             entries = DataHelper.load(this);
@@ -218,40 +213,25 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                     super.onCreate(savedInstanceState);
                     setContentView(R.layout.about);
 
-                    findViewById(R.id.bierbaumer).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri uri = Uri.parse("https://github.com/0xbb");
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        }
+                    findViewById(R.id.bierbaumer).setOnClickListener(view -> {
+                        Uri uri = Uri.parse("https://github.com/0xbb");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
                     });
-                    findViewById(R.id.linkcommons).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri uri = Uri.parse("https://commons.apache.org/proper/commons-codec/");
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        }
+                    findViewById(R.id.linkcommons).setOnClickListener(view -> {
+                        Uri uri = Uri.parse("https://commons.apache.org/proper/commons-codec/");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
                     });
-                    findViewById(R.id.ZXing).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri uri = Uri.parse("https://github.com/zxing/zxing");
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        }
+                    findViewById(R.id.ZXing).setOnClickListener(view -> {
+                        Uri uri = Uri.parse("https://github.com/zxing/zxing");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
                     });
-                    findViewById(R.id.ZXingEmbedded).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri uri = Uri.parse("https://github.com/journeyapps/zxing-android-embedded");
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        }
+                    findViewById(R.id.ZXingEmbedded).setOnClickListener(view -> {
+                        Uri uri = Uri.parse("https://github.com/journeyapps/zxing-android-embedded");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
                     });
-                    findViewById(R.id.draglistview).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Uri uri = Uri.parse("https://github.com/woxblom/DragListView");
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        }
+                    findViewById(R.id.draglistview).setOnClickListener(view -> {
+                        Uri uri = Uri.parse("https://github.com/woxblom/DragListView");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
                     });
                 }
             };
@@ -316,12 +296,9 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                 }
             });
 
-            alert.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                    actionMode.finish();
-                }
+            alert.setNegativeButton(R.string.button_cancel, (dialog, whichButton) -> {
+                dialog.cancel();
+                actionMode.finish();
             });
 
             alert.show();
