@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.Arrays;
 
-public class EntryObject {
+public class AccountStruc {
     public static final String JSON_LABEL = "label";
     public static final String JSON_ACCOUNT = "account";
     public static final String JSON_ALGORITHM = "algorithm";
@@ -28,7 +28,7 @@ public class EntryObject {
     private byte[] secret;
     private String currentOTP;
 
-    public EntryObject(String contents) throws Exception {
+    public AccountStruc(String contents) throws Exception {
         contents = contents.replaceFirst("otpauth", "http");
         Uri uri = Uri.parse(contents);
         URL url = new URL(contents);
@@ -85,7 +85,7 @@ public class EntryObject {
         currentOTP = DataHelper.OTP_NONE;
     }
 
-    public EntryObject(JSONObject jsonObj ) throws JSONException {
+    public AccountStruc(JSONObject jsonObj ) throws JSONException {
         this.setLabel(jsonObj.getString(JSON_LABEL));
         this.setAccount(jsonObj.getString(JSON_ACCOUNT));
         this.setAlgorithm(jsonObj.getString(JSON_ALGORITHM));
@@ -190,7 +190,7 @@ public class EntryObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntryObject entry = (EntryObject) o;
+        AccountStruc entry = (AccountStruc) o;
 
         if (!Arrays.equals(secret, entry.secret)) return false;
         return !( (account != null) ? !account.equals(entry.account) : (entry.account != null) );

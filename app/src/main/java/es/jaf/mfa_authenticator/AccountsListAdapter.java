@@ -14,7 +14,7 @@ import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 
-public class EntryAdapter extends DragItemAdapter<Pair<Integer, EntryObject>, EntryAdapter.ViewHolder> {
+public class AccountsListAdapter extends DragItemAdapter<Pair<Integer, AccountStruc>, AccountsListAdapter.ViewHolder> {
 
     private final IAdapterEvents listener;
     private final int mLayoutId;
@@ -22,7 +22,7 @@ public class EntryAdapter extends DragItemAdapter<Pair<Integer, EntryObject>, En
     private final boolean mDragOnLongPress;
     private final SpannableStringBuilder imgOtpNone;
 
-    public EntryAdapter(Context context, IAdapterEvents listener, ArrayList<Pair<Integer, EntryObject>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public AccountsListAdapter(Context context, IAdapterEvents listener, ArrayList<Pair<Integer, AccountStruc>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
         imgOtpNone = new SpannableStringBuilder().append(" ", new ImageSpan(context, R.drawable.dots), 0);
         this.listener = listener;
         mLayoutId = layoutId;
@@ -50,7 +50,7 @@ public class EntryAdapter extends DragItemAdapter<Pair<Integer, EntryObject>, En
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        EntryObject entry = mItemList.get(position).second;
+        AccountStruc entry = mItemList.get(position).second;
         if (DataHelper.OTP_NONE.equals(entry.getCurrentOTP())) {
             holder.txtOtp.setText(imgOtpNone);
         } else {

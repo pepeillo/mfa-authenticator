@@ -19,7 +19,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class EntryActivity extends AppCompatActivity implements  ActionMode.Callback {
+public class AccountEditActivity extends AppCompatActivity implements  ActionMode.Callback {
 
     private EditText txtLabel;
     private EditText txtAccount;
@@ -32,7 +32,7 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
+        setContentView(R.layout.account_edit_activity);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -78,22 +78,22 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        startActionMode(EntryActivity.this);
+        startActionMode(AccountEditActivity.this);
     }
 
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        EntryActivity.this.setResult(Activity.RESULT_CANCELED);
-        EntryActivity.this.finish();
+        AccountEditActivity.this.setResult(Activity.RESULT_CANCELED);
+        AccountEditActivity.this.finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {// todo: goto back activity from here
 
-            EntryActivity.this.setResult(Activity.RESULT_CANCELED);
-            EntryActivity.this.finish();
+            AccountEditActivity.this.setResult(Activity.RESULT_CANCELED);
+            AccountEditActivity.this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -102,7 +102,7 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
     @Override
     public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
         MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate(R.menu.menu_entry, menu);
+        inflater.inflate(R.menu.menu_account, menu);
 
         return true;
     }
@@ -132,8 +132,8 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
             intent.putExtra("digits", digits);
             intent.putExtra("locked", chkFavourite.isChecked());
 
-            EntryActivity.this.setResult(Activity.RESULT_OK, intent);
-            EntryActivity.this.finish();
+            AccountEditActivity.this.setResult(Activity.RESULT_OK, intent);
+            AccountEditActivity.this.finish();
 
             return true;
         }
@@ -142,8 +142,8 @@ public class EntryActivity extends AppCompatActivity implements  ActionMode.Call
 
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
-        EntryActivity.this.setResult(Activity.RESULT_CANCELED);
-        EntryActivity.this.finish();
+        AccountEditActivity.this.setResult(Activity.RESULT_CANCELED);
+        AccountEditActivity.this.finish();
     }
 
 

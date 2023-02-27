@@ -47,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
                 OutputStream os = null;
                 try {
                     os = getContentResolver().openOutputStream(uri);
-                    ArrayList<Pair<Integer, EntryObject>> entries = DataHelper.load(this);
+                    ArrayList<Pair<Integer, AccountStruc>> entries = DataHelper.load(this);
                     DataHelper.exportFile(this, entries, os, true);
                 } catch (Exception e) {
                     Utils.saveException("Exporting file", e);
@@ -71,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
                 InputStream is = null;
                 try {
                     is = getContentResolver().openInputStream(uri);
-                    ArrayList<Pair<Integer, EntryObject>> entries = DataHelper.load(this);
+                    ArrayList<Pair<Integer, AccountStruc>> entries = DataHelper.load(this);
                     entries.addAll(DataHelper.importFile(this, is, true));
                     DataHelper.store(this, entries);
                 } catch (Exception e) {

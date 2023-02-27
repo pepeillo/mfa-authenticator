@@ -10,7 +10,7 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:background="@android:color/background_light"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:context="es.jaf.mfa_authenticator.EntriesActivity"
+                tools:context="es.jaf.mfa_authenticator.AccountsActivity"
                 tools:showIn="@layout/activity_entries">
 
     <com.woxthebox.draglistview.DragListView

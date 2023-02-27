@@ -33,9 +33,9 @@ import org.apache.commons.codec.binary.Base32;
 
 import java.util.ArrayList;
 
-public class EntriesActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
-    private ArrayList<Pair<Integer, EntryObject>> entries;
-    private EntryAdapter adapter;
+public class AccountsActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
+    private ArrayList<Pair<Integer, AccountStruc>> entries;
+    private AccountsListAdapter adapter;
     private FloatingActionButton floatingButton;
 
     DragListView listView;
@@ -49,7 +49,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
     private MyRunnable handlerTaskRow;
 
     private void doScanQRCode() {
-        new IntentIntegrator(EntriesActivity.this)
+        new IntentIntegrator(AccountsActivity.this)
                 .setCaptureActivity(CaptureActivityAnyOrientation.class)
                 .setOrientationLocked(false)
                 .initiateScan();
@@ -84,18 +84,18 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
         }
     }
 
-    private Pair<Integer, EntryObject> nextSelection = null;
+    private Pair<Integer, AccountStruc> nextSelection = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        setContentView(R.layout.activity_entries);
+        setContentView(R.layout.accounts_activity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         floatingButton = findViewById(R.id.action_scan);
-        floatingButton.setOnClickListener(view -> EntriesActivity.this.scanQRCode());
+        floatingButton.setOnClickListener(view -> AccountsActivity.this.scanQRCode());
 
         try {
             entries = DataHelper.load(this);
@@ -115,7 +115,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
                     try {
-                        DataHelper.store(EntriesActivity.this, entries);
+                        DataHelper.store(AccountsActivity.this, entries);
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         Utils.saveException("Dropping account", e);
@@ -140,7 +140,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
 
         if (requestCode == ACTION_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
-                EntryObject entry = nextSelection.second;
+                AccountStruc entry = nextSelection.second;
                 entry.setLabel(intent.getStringExtra("label"));
                 entry.setAccount(intent.getStringExtra("account"));
                 entry.setIssuer(intent.getStringExtra("issuer"));
@@ -176,7 +176,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
 
         if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
-                EntryObject e = new EntryObject(intent.getStringExtra(Intents.Scan.RESULT));
+                AccountStruc e = new AccountStruc(intent.getStringExtra(Intents.Scan.RESULT));
                 e.setCurrentOTP(DataHelper.OTP_NONE);
                 entries.add(new Pair<>(entries.size(), e));
                 DataHelper.store(this, entries);
@@ -211,7 +211,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                 @Override
                 protected void onCreate(Bundle savedInstanceState) {
                     super.onCreate(savedInstanceState);
-                    setContentView(R.layout.about);
+                    setContentView(R.layout.about_dialog);
 
                     findViewById(R.id.bierbaumer).setOnClickListener(view -> {
                         Uri uri = Uri.parse("https://github.com/0xbb");
@@ -241,7 +241,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             return true;
         }
         if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(EntriesActivity.this, SettingsActivity.class), ACTION_SETTINGS);
+            startActivityForResult(new Intent(AccountsActivity.this, SettingsActivity.class), ACTION_SETTINGS);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -279,7 +279,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
                 public void onClick(DialogInterface dialog, int whichButton) {
                     entries.remove(nextSelection);
                     try {
-                        DataHelper.store(EntriesActivity.this, entries);
+                        DataHelper.store(AccountsActivity.this, entries);
 
                         Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
                             @Override
@@ -306,8 +306,8 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
             return true;
 
         } else if (id == R.id.action_edit) {
-            EntryObject entry = nextSelection.second;
-            Intent intent = new Intent(this, EntryActivity.class);
+            AccountStruc entry = nextSelection.second;
+            Intent intent = new Intent(this, AccountEditActivity.class);
             intent.putExtra("label", entry.getLabel());
             intent.putExtra("account", entry.getAccount());
             intent.putExtra("issuer", entry.getIssuer());
@@ -348,10 +348,10 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
 
     private void setupListRecyclerView() {
         listView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EntryAdapter(this,this, entries, R.layout.entry_row, R.id.image, false);
+        adapter = new AccountsListAdapter(this,this, entries, R.layout.account_list_row, R.id.image, false);
         listView.setAdapter(adapter, true);
         listView.setCanDragHorizontally(false);
-        listView.setCustomDragItem(new MyDragItem(this, R.layout.entry_row));
+        listView.setCustomDragItem(new MyDragItem(this, R.layout.account_list_row));
     }
 
     @Override
@@ -363,7 +363,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean copyToClipboard =  pref.getBoolean("copy_clipboard", false);
 
-        final EntryObject entry = entries.get(position).second;
+        final AccountStruc entry = entries.get(position).second;
         String numOtp = entry.getCurrentOTP();
 
         if (DataHelper.OTP_NONE.equals( entry.getCurrentOTP())) {
@@ -428,7 +428,7 @@ public class EntriesActivity extends AppCompatActivity implements  ActionMode.Ca
         nextSelection = entries.get(position);
         viewLongClicked = view;
         view.setBackground(getResources().getDrawable(R.drawable.row_selected));
-        actionMode = startActionMode(EntriesActivity.this);
+        actionMode = startActionMode(AccountsActivity.this);
         return true;
     }
 

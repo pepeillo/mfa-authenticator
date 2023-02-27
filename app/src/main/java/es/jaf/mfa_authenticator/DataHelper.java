@@ -15,20 +15,20 @@ public class DataHelper {
     public static final String DATA_FILE = "secrets.dat";
     public static final String OTP_NONE = "------";
 
-    public static void store(Context context, ArrayList<Pair<Integer, EntryObject>> entries) throws Exception{
+    public static void store(Context context, ArrayList<Pair<Integer, AccountStruc>> entries) throws Exception{
         save(context, entries, new File(context.getFilesDir() + "/" + DATA_FILE));
     }
 
-    public static ArrayList<Pair<Integer, EntryObject>> load(Context context) throws Exception {
+    public static ArrayList<Pair<Integer, AccountStruc>> load(Context context) throws Exception {
         return read(context, new File(context.getFilesDir() + "/" + DATA_FILE));
     }
 
-    public static void save(Context context, ArrayList<Pair<Integer, EntryObject>> entries, File file) throws Exception{
+    public static void save(Context context, ArrayList<Pair<Integer, AccountStruc>> entries, File file) throws Exception{
         OutputStream os = new FileOutputStream(file);
         exportFile(context, entries, os);
     }
 
-    public static ArrayList<Pair<Integer, EntryObject>> read(Context context, File file) throws Exception {
+    public static ArrayList<Pair<Integer, AccountStruc>> read(Context context, File file) throws Exception {
         FileInputStream is = null;
 
         if (file.exists()) {
@@ -37,14 +37,14 @@ public class DataHelper {
         return importFile(context, is);
     }
 
-    public static void exportFile(Context context, ArrayList<Pair<Integer, EntryObject>> entries, OutputStream os) throws Exception{
+    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> entries, OutputStream os) throws Exception{
         exportFile(context, entries, os,false);
     }
-    public static void exportFile(Context context, ArrayList<Pair<Integer, EntryObject>> entries, OutputStream os, boolean base64) throws Exception{
+    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> entries, OutputStream os, boolean base64) throws Exception{
         JSONArray a = new JSONArray();
 
-        for(Pair<Integer, EntryObject> p: entries){
-            EntryObject e = p.second;
+        for(Pair<Integer, AccountStruc> p: entries){
+            AccountStruc e = p.second;
             try {
                 a.put(e.toJSON());
             } catch (JSONException e1) {
@@ -66,11 +66,11 @@ public class DataHelper {
         Utils.writeFully(os, data);
     }
 
-    public static ArrayList<Pair<Integer, EntryObject>> importFile(Context context, InputStream is) throws Exception {
+    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is) throws Exception {
         return importFile(context, is, false);
     }
-    public static ArrayList<Pair<Integer, EntryObject>> importFile(Context context, InputStream is, boolean base64) throws Exception {
-        ArrayList<Pair<Integer, EntryObject>> entries = new ArrayList<>();
+    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is, boolean base64) throws Exception {
+        ArrayList<Pair<Integer, AccountStruc>> entries = new ArrayList<>();
 
         byte[] data = null;
         if (is != null) {
@@ -92,7 +92,7 @@ public class DataHelper {
         if (data != null) {
             JSONArray a = new JSONArray(new String(data));
             for (int i = 0; i < a.length(); i++) {
-                entries.add(new Pair<>(i, new EntryObject(a.getJSONObject(i))));
+                entries.add(new Pair<>(i, new AccountStruc(a.getJSONObject(i))));
             }
         }
 

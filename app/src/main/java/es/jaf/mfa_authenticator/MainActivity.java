@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         findViewById(R.id.cmdLogin).setOnClickListener(view -> {
             String pwd = ((EditText) findViewById(R.id.password)).getText().toString();
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                             editor.commit();
                         } catch (Exception e) {/**/}
 
-                        startActivity(new Intent(getApplicationContext(), EntriesActivity.class));
+                        startActivity(new Intent(getApplicationContext(), AccountsActivity.class));
                         finish();
                     } else {
                         dialog.setTitle(R.string.app_name)
