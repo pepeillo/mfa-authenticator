@@ -34,7 +34,7 @@ import org.apache.commons.codec.binary.Base32;
 import java.util.ArrayList;
 
 public class AccountsActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
-    private ArrayList<Pair<Integer, AccountStruc>> entries;
+    private ArrayList<Pair<Integer, AccountStruc>> accounts;
     private AccountsListAdapter adapter;
     private FloatingActionButton floatingButton;
 
@@ -98,7 +98,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         floatingButton.setOnClickListener(view -> AccountsActivity.this.scanQRCode());
 
         try {
-            entries = DataHelper.load(this);
+            accounts = DataHelper.load(this);
         } catch (Exception e) {
             Utils.saveException("Loading accounts.", e);
             Snackbar.make(floatingButton, R.string.err_loading_accounts, Snackbar.LENGTH_LONG).show();
@@ -115,7 +115,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
                     try {
-                        DataHelper.store(AccountsActivity.this, entries);
+                        DataHelper.store(AccountsActivity.this, accounts);
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         Utils.saveException("Dropping account", e);
@@ -140,16 +140,16 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
         if (requestCode == ACTION_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
-                AccountStruc entry = nextSelection.second;
-                entry.setLabel(intent.getStringExtra("label"));
-                entry.setAccount(intent.getStringExtra("account"));
-                entry.setIssuer(intent.getStringExtra("issuer"));
-                entry.setAlgorithm(intent.getStringExtra("algorithm"));
-                entry.setPeriod(intent.getIntExtra("period", 30));
-                entry.setDigits(intent.getIntExtra("digits", 6));
-                entry.setLocked(intent.getBooleanExtra("locked", false));
+                AccountStruc account = nextSelection.second;
+                account.setLabel(intent.getStringExtra("label"));
+                account.setAccount(intent.getStringExtra("account"));
+                account.setIssuer(intent.getStringExtra("issuer"));
+                account.setAlgorithm(intent.getStringExtra("algorithm"));
+                account.setPeriod(intent.getIntExtra("period", 30));
+                account.setDigits(intent.getIntExtra("digits", 6));
+                account.setFavourite(intent.getBooleanExtra("locked", false));
                 try {
-                    DataHelper.store(this, entries);
+                    DataHelper.store(this, accounts);
                 } catch (Exception e) {
                     Utils.saveException("Editing account", e);
                     Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
@@ -164,12 +164,12 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         if (requestCode == ACTION_SETTINGS) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    entries = DataHelper.load(this);
+                    accounts = DataHelper.load(this);
                 } catch (Exception e) {
                     Utils.saveException("Importing accounts", e);
                     Snackbar.make(floatingButton, R.string.err_importing_accounts, Snackbar.LENGTH_LONG).show();
                 }
-                adapter.setItemList(entries);
+                adapter.setItemList(accounts);
                 adapter.notifyDataSetChanged();
             }
         }
@@ -178,8 +178,8 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             try {
                 AccountStruc e = new AccountStruc(intent.getStringExtra(Intents.Scan.RESULT));
                 e.setCurrentOTP(DataHelper.OTP_NONE);
-                entries.add(new Pair<>(entries.size(), e));
-                DataHelper.store(this, entries);
+                accounts.add(new Pair<>(accounts.size(), e));
+                DataHelper.store(this, accounts);
 
                 adapter.notifyDataSetChanged();
 
@@ -268,7 +268,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         int id = menuItem.getItemId();
 
         if (id == R.id.action_delete) {
-            if (nextSelection.second.isLocked()) {
+            if (nextSelection.second.isFavourite()) {
                 Snackbar.make(floatingButton, R.string.mag_not_removed_locked, Snackbar.LENGTH_LONG).show();
                 return true;
             }
@@ -278,9 +278,9 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
             alert.setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    entries.remove(nextSelection);
+                    accounts.remove(nextSelection);
                     try {
-                        DataHelper.store(AccountsActivity.this, entries);
+                        DataHelper.store(AccountsActivity.this, accounts);
 
                         Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
                             @Override
@@ -307,12 +307,12 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             return true;
 
         } else if (id == R.id.action_edit) {
-            AccountStruc entry = nextSelection.second;
+            AccountStruc account = nextSelection.second;
             Intent intent = new Intent(this, AccountEditActivity.class);
-            intent.putExtra("label", entry.getLabel());
-            intent.putExtra("account", entry.getAccount());
-            intent.putExtra("issuer", entry.getIssuer());
-            String tmp = entry.getAlgorithm();
+            intent.putExtra("label", account.getLabel());
+            intent.putExtra("account", account.getAccount());
+            intent.putExtra("issuer", account.getIssuer());
+            String tmp = account.getAlgorithm();
             if ("SHA256".equalsIgnoreCase(tmp)) {
                 intent.putExtra("algorithm", 1);
             } else if ("SHA512".equalsIgnoreCase(tmp)) {
@@ -320,7 +320,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             } else {
                 intent.putExtra("algorithm", 0);
             }
-            int intTmp = entry.getPeriod();
+            int intTmp = account.getPeriod();
             if (intTmp == 15) {
                 intent.putExtra("period", 0);
             } else if (intTmp == 60) {
@@ -328,9 +328,9 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             } else {
                 intent.putExtra("period", 1);
             }
-            intent.putExtra("digits", entry.getDigits());
-            intent.putExtra("locked", entry.isLocked());
-            intent.putExtra("secret", new String(new Base32().encode(entry.getSecret())));
+            intent.putExtra("digits", account.getDigits());
+            intent.putExtra("locked", account.isFavourite());
+            intent.putExtra("secret", new String(new Base32().encode(account.getSecret())));
             startActivityForResult(intent, ACTION_EDIT);
             return true;
         }
@@ -349,7 +349,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
     private void setupListRecyclerView() {
         listView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AccountsListAdapter(this,this, entries, R.layout.account_list_row, R.id.image, false);
+        adapter = new AccountsListAdapter(this,this, accounts, R.layout.account_list_row, R.id.image, false);
         listView.setAdapter(adapter, true);
         listView.setCanDragHorizontally(false);
         listView.setCustomDragItem(new MyDragItem(this, R.layout.account_list_row));
@@ -364,10 +364,10 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean copyToClipboard =  pref.getBoolean("copy_clipboard", false);
 
-        final AccountStruc entry = entries.get(position).second;
-        String numOtp = entry.getCurrentOTP();
+        final AccountStruc account = accounts.get(position).second;
+        String numOtp = account.getCurrentOTP();
 
-        if (DataHelper.OTP_NONE.equals( entry.getCurrentOTP())) {
+        if (DataHelper.OTP_NONE.equals( account.getCurrentOTP())) {
             if (handlerTaskRow != null) {
                 handlerTaskRow.interrupt();
             }
@@ -378,7 +378,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             return;
         }
 
-        final int period = entry.getPeriod();
+        final int period = account.getPeriod();
         final ProgressBar progressBar = view.findViewById(R.id.progress);
         final int max = progressBar.getMax();
         final TextView txtCount = view.findViewById(R.id.txtcount);
@@ -391,8 +391,8 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             public void run() {
                 int progress = (int) (System.currentTimeMillis() / 1000) % period;
                 if (counter == 0 || (progress % period) < 1) {
-                    String numOtp = TOTPHelper.generate(entry.getSecret(), entry.getDigits(), entry.getAlgorithm());
-                    entry.setCurrentOTP(numOtp);
+                    String numOtp = TOTPHelper.generate(account.getSecret(), account.getDigits(), account.getAlgorithm());
+                    account.setCurrentOTP(numOtp);
                     adapter.notifyDataSetChanged();
                     if (counter == 0  && copyToClipboard) {
                         copyToClipboard(numOtp);
@@ -409,7 +409,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
                     progressBar.setSecondaryProgress(0);
                     txtCount.setText("");
                     handlerRow.removeCallbacks(this);
-                    entry.setCurrentOTP(DataHelper.OTP_NONE);
+                    account.setCurrentOTP(DataHelper.OTP_NONE);
                     adapter.notifyDataSetChanged();
                     return;
                 }
@@ -426,7 +426,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             actionMode.finish();
         }
 
-        nextSelection = entries.get(position);
+        nextSelection = accounts.get(position);
         viewLongClicked = view;
         view.setBackground(getResources().getDrawable(R.drawable.row_selected));
         actionMode = startActionMode(AccountsActivity.this);

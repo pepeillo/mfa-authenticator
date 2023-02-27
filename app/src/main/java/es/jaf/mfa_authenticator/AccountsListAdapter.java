@@ -50,21 +50,21 @@ public class AccountsListAdapter extends DragItemAdapter<Pair<Integer, AccountSt
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        AccountStruc entry = mItemList.get(position).second;
-        if (DataHelper.OTP_NONE.equals(entry.getCurrentOTP())) {
+        AccountStruc account = mItemList.get(position).second;
+        if (DataHelper.OTP_NONE.equals(account.getCurrentOTP())) {
             holder.txtOtp.setText(imgOtpNone);
         } else {
-            holder.txtOtp.setText(entry.getCurrentOTP());
+            holder.txtOtp.setText(account.getCurrentOTP());
         }
 
-        String text = entry.getLabel();
+        String text = account.getLabel();
         if (text == null || text.length() == 0) {
-            text = entry.getIssuer();
+            text = account.getIssuer();
         }
         holder.txtLabel.setText(text);
         holder.itemView.setTag(text);
-        holder.txtAccount.setText(entry.getAccount());
-        holder.imgLocked.setVisibility(entry.isLocked() ? View.VISIBLE : View.INVISIBLE);
+        holder.txtAccount.setText(account.getAccount());
+        holder.imgLocked.setVisibility(account.isFavourite() ? View.VISIBLE : View.INVISIBLE);
     }
 
     public class ViewHolder extends DragItemAdapter.ViewHolder {

@@ -30,7 +30,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_entries" />
+    <include layout="@layout/accounts_content" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_scan"

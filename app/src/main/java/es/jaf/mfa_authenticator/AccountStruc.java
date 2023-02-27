@@ -24,7 +24,7 @@ public class AccountStruc {
     private String issuer;
     private int period;
     private int digits;
-    private boolean locked;
+    private boolean favourite;
     private byte[] secret;
     private String currentOTP;
 
@@ -81,7 +81,7 @@ public class AccountStruc {
         } catch (Exception e) {
             digits = 6;
         }
-        locked = false;
+        favourite = false;
         currentOTP = DataHelper.OTP_NONE;
     }
 
@@ -100,7 +100,7 @@ public class AccountStruc {
         } catch (Exception e) {
             this.setDigits(6);
         }
-        this.setLocked("true".equals(jsonObj.getString(JSON_LOCKED)));
+        this.setFavourite("true".equals(jsonObj.getString(JSON_LOCKED)));
         this.setSecret(new Base32().decode(jsonObj.getString(JSON_SECRET)));
         this.currentOTP = DataHelper.OTP_NONE;
     }
@@ -113,7 +113,7 @@ public class AccountStruc {
         jsonObj.put(JSON_ISSUER, getIssuer());
         jsonObj.put(JSON_PERIOD, getPeriod());
         jsonObj.put(JSON_DIGITS, getDigits());
-        jsonObj.put(JSON_LOCKED, isLocked());
+        jsonObj.put(JSON_LOCKED, isFavourite());
         jsonObj.put(JSON_SECRET, new String(new Base32().encode(getSecret())));
 
         return jsonObj;
@@ -154,17 +154,16 @@ public class AccountStruc {
         digits = value;
     }
 
-    public boolean isLocked() {
-        return locked;
+    public boolean isFavourite() {
+        return favourite;
     }
-    public void setLocked(boolean value) {
-        locked = value;
+    public void setFavourite(boolean value) {
+        favourite = value;
     }
 
     public byte[] getSecret() {
         return secret;
     }
-
     public void setSecret(byte[] secret) {
         this.secret = secret;
     }
@@ -172,7 +171,6 @@ public class AccountStruc {
     public String getLabel() {
         return label;
     }
-
     public void setLabel(String label) {
         this.label = label;
     }
@@ -180,7 +178,6 @@ public class AccountStruc {
     public String getCurrentOTP() {
         return currentOTP;
     }
-
     public void setCurrentOTP(String currentOTP) {
         this.currentOTP = currentOTP;
     }
@@ -190,10 +187,10 @@ public class AccountStruc {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AccountStruc entry = (AccountStruc) o;
+        AccountStruc account = (AccountStruc) o;
 
-        if (!Arrays.equals(secret, entry.secret)) return false;
-        return !( (account != null) ? !account.equals(entry.account) : (entry.account != null) );
+        if (!Arrays.equals(secret, account.secret)) return false;
+        return !( (this.account != null) ? !this.account.equals(account.account) : (account.account != null) );
 
     }
 

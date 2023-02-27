@@ -47,8 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
                 OutputStream os = null;
                 try {
                     os = getContentResolver().openOutputStream(uri);
-                    ArrayList<Pair<Integer, AccountStruc>> entries = DataHelper.load(this);
-                    DataHelper.exportFile(this, entries, os, true);
+                    ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
+                    DataHelper.exportFile(this, accounts, os, true);
                 } catch (Exception e) {
                     Utils.saveException("Exporting file", e);
                     Toast.makeText(this, "Error exporting file. " + e, Toast.LENGTH_SHORT).show();
@@ -71,9 +71,9 @@ public class SettingsActivity extends AppCompatActivity {
                 InputStream is = null;
                 try {
                     is = getContentResolver().openInputStream(uri);
-                    ArrayList<Pair<Integer, AccountStruc>> entries = DataHelper.load(this);
-                    entries.addAll(DataHelper.importFile(this, is, true));
-                    DataHelper.store(this, entries);
+                    ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
+                    accounts.addAll(DataHelper.importFile(this, is, true));
+                    DataHelper.store(this, accounts);
                 } catch (Exception e) {
                     Utils.saveException("Importing file", e);
                     Toast.makeText(this, "Error importing file. " + e, Toast.LENGTH_SHORT).show();
