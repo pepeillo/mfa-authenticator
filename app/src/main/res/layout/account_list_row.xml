@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtcount"
-                android:paddingTop="28dp"
+                android:paddingTop="27dp"
                 android:paddingRight="13dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_gravity="center" />

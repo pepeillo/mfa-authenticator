@@ -15,9 +15,9 @@
                     android:useLevel="true">
 
                 <gradient
+                        android:endColor="#25CC00"
                         android:centerColor="@android:color/holo_orange_light"
                         android:startColor="@android:color/holo_red_light"
-                        android:endColor="@android:color/darker_gray"
                         android:type="sweep" />
 
             </shape>
@@ -32,14 +32,14 @@
                 android:toDegrees="270">
 
             <shape
-                    android:innerRadiusRatio="4.5"
+                    android:innerRadiusRatio="7.0"
                     android:shape="ring"
-                    android:thicknessRatio="20.0"
+                    android:thicknessRatio="8.0"
                     android:useLevel="true">
 
                 <gradient
-                        android:centerColor="@android:color/holo_green_light"
-                        android:endColor="@android:color/holo_green_light"
+                        android:endColor="#25CC00"
+                        android:centerColor="#25CC00"
                         android:startColor="@android:color/darker_gray"
                         android:type="sweep" />
 
