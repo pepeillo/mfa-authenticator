@@ -19,7 +19,6 @@
                         android:centerColor="@android:color/holo_orange_light"
                         android:startColor="@android:color/holo_red_light"
                         android:type="sweep" />
-
             </shape>
         </rotate>
     </item>
@@ -42,7 +41,6 @@
                         android:centerColor="#25CC00"
                         android:startColor="@android:color/darker_gray"
                         android:type="sweep" />
-
             </shape>
         </rotate>
     </item>
