@@ -51,7 +51,7 @@ public class DataHelper {
                 Utils.saveException("Converting to json " + e, e1);
             }
         }
-        String pwd = context.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE).getString("pwd", null);
+        String pwd = MyApplication.getEncryptedPrefs().getString("pwd", null);
 
         byte[] data = a.toString().getBytes();
 
@@ -80,7 +80,7 @@ public class DataHelper {
             }
         }
 
-        String pwd = context.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE).getString("pwd", null);
+        String pwd = MyApplication.getEncryptedPrefs().getString("pwd", null);
 
         int currentApiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentApiVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

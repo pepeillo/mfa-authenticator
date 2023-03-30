@@ -7,10 +7,7 @@ import android.content.SharedPreferences;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +15,18 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean hasBiometric;
     private boolean pwdSaved;
-    private SharedPreferences prefs = null;
+    private SharedPreferences encryptedPrefs = null;
 
     // Se deja la clase pero sin funcionalidad.
  // Cuando tenga ganas, implementaré la conexión con password y la autenticación biométrica
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        findViewById(R.id.cmdLogin).setOnClickListener(view -> {
+        Button cmdLogin = findViewById(R.id.cmdLogin);
+        cmdLogin.setOnClickListener(view -> {
             String pwd = ((EditText) findViewById(R.id.password)).getText().toString();
             boolean canValidatePwd = false;
             if (pwdSaved) {
@@ -92,9 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
         pwdSaved = false;
 
-        prefs = MainActivity.this.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
         try {
-            String myPwd = prefs.getString("pwd", null);
+            encryptedPrefs = MyApplication.getEncryptedPrefs();
+        } catch (Exception e) {
+            cmdLogin.setEnabled(false);
+        }
+        try {
+            String myPwd = encryptedPrefs.getString("pwd", null);
             pwdSaved = (myPwd != null && myPwd.length() > 0);
         } catch (Exception e) {/**/}
 
@@ -142,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String key = null;
                     if (hasBiometric) {
-                        SharedPreferences prefs = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
-                        key = prefs.getString("pwd", null);
+                        key = encryptedPrefs.getString("pwd", null);
                     }
                     if (key != null) {
                         new MainActivity.BackTask(key).execute();
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             new Thread(() -> {
                 try {
                     if (pwdSaved) {
-                        String pwdReaded = prefs.getString("pwd", "");
+                        String pwdReaded = encryptedPrefs.getString("pwd", "");
                         pwdOk = pwdReaded.equals(this.pwd);
                     } else {
                         pwdOk = true;
@@ -196,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (pwdOk) {
                         try {
-                            SharedPreferences.Editor editor = prefs.edit();
+                            SharedPreferences.Editor editor = encryptedPrefs.edit();
                             editor.putString("pwd", pwd);
                             editor.apply();
                             editor.commit();
