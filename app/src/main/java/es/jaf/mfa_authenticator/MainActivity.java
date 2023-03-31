@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Process;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -115,14 +116,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (hasBiometric && pwdSaved) {
-            if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean("use_biometric", false)) {
-                findViewById(R.id.cmdBiometric).setVisibility(View.VISIBLE);
-                withBiometric();
-            }
-        }
+    public void onBackPressed() {
+        android.os.Process.killProcess(Process.myPid());
+        finish();
     }
 
     private void withBiometric() {
