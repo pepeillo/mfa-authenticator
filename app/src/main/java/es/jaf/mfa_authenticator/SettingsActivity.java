@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -48,22 +47,12 @@ public class SettingsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ACTION_EXPORT) {
             Uri uri = data.getData();
             if (uri != null) {
-                OutputStream os = null;
-                try {
-                    os = getContentResolver().openOutputStream(uri);
+                try (OutputStream os = getContentResolver().openOutputStream(uri)) {
                     ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
                     DataHelper.exportFile(this, accounts, os, true);
                 } catch (Exception e) {
                     Utils.saveException("Exporting file", e);
                     Toast.makeText(this, "Error exporting file. " + e, Toast.LENGTH_SHORT).show();
-                } finally {
-                    if (os != null) {
-                        try {
-                            os.close();
-                        } catch (IOException e) {
-                            //Nothing
-                        }
-                    }
                 }
             }
             return;
@@ -72,23 +61,13 @@ public class SettingsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ACTION_IMPORT) {
             Uri uri = data.getData();
             if (uri != null) {
-                InputStream is = null;
-                try {
-                    is = getContentResolver().openInputStream(uri);
+                try (InputStream is = getContentResolver().openInputStream(uri)) {
                     ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
                     accounts.addAll(DataHelper.importFile(this, is, true));
                     DataHelper.store(this, accounts);
                 } catch (Exception e) {
                     Utils.saveException("Importing file", e);
                     Toast.makeText(this, "Error importing file. " + e, Toast.LENGTH_SHORT).show();
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            //Nothing
-                        }
-                    }
                 }
             }
         }

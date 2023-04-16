@@ -1,7 +1,6 @@
 package es.jaf.mfa_authenticator;
 
 import android.content.Context;
-import android.util.Log;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -13,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
-import java.util.Random;
 
 import static es.jaf.mfa_authenticator.Utils.readFully;
 import static es.jaf.mfa_authenticator.Utils.writeFully;
