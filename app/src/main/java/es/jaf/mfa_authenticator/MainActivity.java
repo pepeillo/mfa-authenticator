@@ -1,9 +1,11 @@
 package es.jaf.mfa_authenticator;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Process;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -11,16 +13,11 @@ import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKeys;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
@@ -93,6 +90,17 @@ public class MainActivity extends AppCompatActivity {
         int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
         hasBiometric = (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS);
 
+        boolean requestPermissions = false;
+
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED
+        ) {
+            hasBiometric = false;
+            requestPermissions = true;
+        }
+
         pwdSaved = false;
 
         try {
@@ -112,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.cmdBiometric).setVisibility(View.VISIBLE);
                 withBiometric();
             }
+        }
+        if (requestPermissions) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.USE_BIOMETRIC,
+            }, 1111);
         }
     }
 

@@ -1,8 +1,10 @@
 package es.jaf.mfa_authenticator;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
@@ -12,7 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceFragmentCompat;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,6 +102,15 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void cmdExport(View view) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Snackbar.make(view, "No hay permisos asignados.", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                 .setMessage(R.string.export_to_encrypted)
                 .setCancelable(false)
@@ -110,6 +123,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void cmdImport(View view) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Snackbar.make(view, "No hay permisos asignados.", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                 .setMessage(R.string.import_from_encrypted)
                 .setCancelable(false)
