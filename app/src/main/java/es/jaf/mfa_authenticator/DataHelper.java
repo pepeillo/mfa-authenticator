@@ -38,7 +38,7 @@ public class DataHelper {
 
     public static void save(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, File file) throws Exception{
         OutputStream os = new FileOutputStream(file, false);
-        exportFile(context, accounts, os);
+        exportFile(context, accounts, os, false);
     /*
         SharedPreferences encryptedPrefs = Utils.getEncryptedPrefs(context.getApplicationContext());
         JSONArray arr = new JSONArray();
@@ -59,12 +59,9 @@ public class DataHelper {
         if (file.exists()) {
             is = new FileInputStream(file);
         }
-        return importFile(context, is);
+        return importFile(context, is, false);
     }
 
-    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os) throws Exception{
-        exportFile(context, accounts, os,false);
-    }
     public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os, boolean base64) throws Exception{
         JSONArray a = new JSONArray();
 
@@ -91,9 +88,6 @@ public class DataHelper {
         Utils.writeFully(os, data);
     }
 
-    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is) throws Exception {
-        return importFile(context, is, false);
-    }
     public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is, boolean base64) throws Exception {
         ArrayList<Pair<Integer, AccountStruc>> accounts = new ArrayList<>();
 
