@@ -16,7 +16,13 @@
 
 package es.jaf.mfa_authenticator;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
+
 import java.io.*;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,13 +47,25 @@ public class Utils {
     }
 
     public static void writeFully(File file, byte[] data) throws Exception {
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (OutputStream out = new FileOutputStream(file, false)) {
             out.write(data);
         }
     }
 
     public static void writeFully(OutputStream os, byte[] data) throws IOException {
         os.write(data);
+    }
+
+    protected static SharedPreferences getEncryptedPrefs(Context appContext) throws GeneralSecurityException, IOException {
+        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+
+        // on below line initializing our encrypted shared preferences and passing our key to it.
+        return  EncryptedSharedPreferences.create(
+                BuildConfig.APPLICATION_ID,
+                masterKeyAlias,
+                appContext,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
     }
 
     static void saveException(String text, Exception ex) {

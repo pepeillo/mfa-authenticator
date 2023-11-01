@@ -24,7 +24,7 @@ public class DataHelper {
     }
 
     public static void save(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, File file) throws Exception{
-        OutputStream os = new FileOutputStream(file);
+        OutputStream os = new FileOutputStream(file, false);
         exportFile(context, accounts, os);
     }
 
@@ -51,7 +51,7 @@ public class DataHelper {
                 Utils.saveException("Converting to json " + e, e1);
             }
         }
-        String pwd = MyApplication.getEncryptedPrefs().getString("pwd", null);
+        String pwd = Utils.getEncryptedPrefs(context.getApplicationContext()).getString("pwd", null);
 
         byte[] data = a.toString().getBytes();
 
@@ -80,7 +80,7 @@ public class DataHelper {
             }
         }
 
-        String pwd = MyApplication.getEncryptedPrefs().getString("pwd", null);
+        String pwd = Utils.getEncryptedPrefs(context.getApplicationContext()).getString("pwd", null);
 
         int currentApiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentApiVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

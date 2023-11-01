@@ -47,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ACTION_EXPORT) {
             Uri uri = data.getData();
             if (uri != null) {
-                try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+                try (OutputStream os = getContentResolver().openOutputStream(uri, "wt")) {
                     ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
                     DataHelper.exportFile(this, accounts, os, true);
                 } catch (Exception e) {
@@ -84,7 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+//                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         ) {
             Snackbar.make(view, "No hay permisos asignados.", Snackbar.LENGTH_SHORT).show();
             return;
@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+//                || ActivityCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         ) {
             Snackbar.make(view, "No hay permisos asignados.", Snackbar.LENGTH_SHORT).show();
             return;

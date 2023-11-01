@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.2.1'
     implementation 'com.github.woxthebox:draglistview:1.7.2'
     implementation "androidx.biometric:biometric:1.1.0"
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.google.android.material:material:1.0.0'
 }

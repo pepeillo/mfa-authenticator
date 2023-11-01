@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         pwdSaved = false;
 
         try {
-            encryptedPrefs = MyApplication.getEncryptedPrefs();
+            encryptedPrefs = Utils.getEncryptedPrefs(getApplicationContext());
         } catch (Exception e) {
             cmdLogin.setEnabled(false);
         }
