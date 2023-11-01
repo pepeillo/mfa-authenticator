@@ -21,11 +21,36 @@ public class DataHelper {
 
     public static ArrayList<Pair<Integer, AccountStruc>> load(Context context) throws Exception {
         return read(context, new File(context.getFilesDir() + "/" + DATA_FILE));
+        /*
+        SharedPreferences encryptedPrefs = Utils.getEncryptedPrefs(context.getApplicationContext());
+        String str = encryptedPrefs.getString("values", null);
+        ArrayList<Pair<Integer, AccountStruc>> accounts = new ArrayList<>();
+        if (str != null) {
+            JSONArray arr = new JSONArray(str);
+            for (int i = 0; i < arr.length(); i++) {
+                AccountStruc elem = new AccountStruc(arr.getJSONObject(i));
+                accounts.add(new Pair<>(i, elem));
+            }
+        }
+        return accounts;
+         */
     }
 
     public static void save(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, File file) throws Exception{
         OutputStream os = new FileOutputStream(file, false);
         exportFile(context, accounts, os);
+    /*
+        SharedPreferences encryptedPrefs = Utils.getEncryptedPrefs(context.getApplicationContext());
+        JSONArray arr = new JSONArray();
+        for (Pair<Integer, AccountStruc> pair : accounts) {
+            try {
+                arr.put(pair.second.toJSON());
+            } catch (Exception e) {
+                Utils.saveException("Converting to json " + e, e);
+            }
+        }
+        encryptedPrefs.edit().putString("values", arr.toString()).commit();
+     */
     }
 
     public static ArrayList<Pair<Integer, AccountStruc>> read(Context context, File file) throws Exception {
