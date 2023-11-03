@@ -49,7 +49,9 @@
     <string name="prompt_password2">Repetir contraseña</string>
     <string name="enter_pwd_new">Introduzca su contraseña y repítala para acceder. Desde ese momento, esa será su contraseña de entrada y los ficheros de datos se encriptarán con ella.</string>
     <string name="export_to_encrypted">Vas a exportar las cuentas existentes a un fichero encriptado. ¿Quieres continuar?</string>
-    <string name="import_from_encrypted">Vas a importar las cuentas existentes de un fichero encriptado ¿Quieres continuar?.</string>
+    <string name="import_from_encrypted">Vas a importar las cuentas existentes de un fichero no encriptado ¿Quieres
+        continuar?.
+    </string>
     <string name="select_a_file">Selecciona un fichero</string>
     <string name="or_biometric">o <a href="">conectar usando biometría</a></string>
     <string name="acknowledgments">Agradecimientos</string>
@@ -69,5 +71,8 @@
         <item>30</item>
         <item>60</item>
     </string-array>
+    <string name="prompt_file">Fichero</string>
+    <string name="process_ok">Proceso finalizado correctamente.</string>
+    <string name="prompt_process_err">Proceso finalizado con errores.</string>
 
 </resources>

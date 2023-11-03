@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@android:color/background_light"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_padding" >
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:text="@string/prompt_password"/>
+        <EditText
+                android:id="@+id/txtpassword"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+        <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="@string/prompt_file"/>
+            <TextView
+                    android:id="@+id/txtFile"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text=""
+                    android:lines="10"
+                    android:layout_weight="1"/>
+            <Button
+                    android:text="..."
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cmdSelect"/>
+        </LinearLayout>
+    <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+        <Button
+                android:enabled="false"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/cmdImport"
+                android:text="@string/cmdimport"/>
+    </LinearLayout>
+    <Space android:layout_width="match_parent" android:layout_height="150dp"/>
+
+</LinearLayout>

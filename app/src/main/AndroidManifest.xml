@@ -44,6 +44,16 @@
                 android:theme="@style/AppTheme" />
 
         <activity
+                android:name=".ExportActivity"
+                android:label="@string/cmdexport"
+                android:theme="@style/AppTheme" />
+
+        <activity
+                android:name=".ImportActivity"
+                android:label="@string/cmdimport"
+                android:theme="@style/AppTheme" />
+
+        <activity
                 android:name="es.jaf.mfa_authenticator.CaptureActivityAnyOrientation"
                 android:screenOrientation="fullSensor"
                 android:stateNotNeeded="true"

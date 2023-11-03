@@ -1,30 +1,21 @@
 package es.jaf.mfa_authenticator;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Process;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.view.View;
-import android.widget.*;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
-
-    private boolean hasBiometric;
-    private boolean pwdSaved;
-    private SharedPreferences encryptedPrefs = null;
 
     // Se deja la clase pero sin funcionalidad.
  // Cuando tenga ganas, implementaré la conexión con password y la autenticación biométrica
@@ -33,101 +24,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Button cmdLogin = findViewById(R.id.cmdLogin);
-        cmdLogin.setOnClickListener(view -> {
-            String pwd = ((EditText) findViewById(R.id.password)).getText().toString();
-            boolean canValidatePwd = false;
-            if (pwdSaved) {
-                canValidatePwd = true;
-            } else {
-                String pwd2 = ((EditText) findViewById(R.id.password2)).getText().toString();
-                if (pwd.length() > 0 && pwd.equals(pwd2)) {
-                    canValidatePwd = true;
-                } else {
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-
-                    dlg.setTitle(R.string.app_name)
-                            .setMessage(R.string.pwd_not_match)
-                            .setCancelable(false)
-                            .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                                dialog.dismiss();
-                                ((EditText)findViewById(R.id.password)).setText("");
-                                ((EditText)findViewById(R.id.password2)).setText("");
-                            });
-                    dlg.show();
-                }
-            }
-            if (canValidatePwd) {
-                new MainActivity.BackTask(pwd).execute();
-            }
-        });
-        EditText txtPwd = findViewById(R.id.password);
-        EditText txtPwd2 = findViewById(R.id.password2);
-        ImageView cmdHideShow = findViewById(R.id.cmdHideShow);
-        ImageView cmdHideShow2 = findViewById(R.id.cmdHideShow2);
-
-        cmdHideShow.setOnClickListener(view -> {
-            if (txtPwd.getTransformationMethod() instanceof PasswordTransformationMethod) {
-                txtPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                cmdHideShow.setImageResource(R.drawable.show);
-            } else {
-                txtPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                cmdHideShow.setImageResource(R.drawable.hide);
-            }
-        });
-        cmdHideShow2.setOnClickListener(view -> {
-            if (txtPwd2.getTransformationMethod() instanceof PasswordTransformationMethod) {
-                txtPwd2.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                cmdHideShow2.setImageResource(R.drawable.show);
-            } else {
-                txtPwd2.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                cmdHideShow2.setImageResource(R.drawable.hide);
-            }
-        });
-        findViewById(R.id.cmdBiometric).setOnClickListener(view -> withBiometric());
-
         BiometricManager biometricManager = BiometricManager.from(this);
         int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
-        hasBiometric = (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS);
 
-        boolean requestPermissions = false;
+        if (!(canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS)) {
+            onBackPressed();
+            return;
+        }
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED
-        ) {
-            hasBiometric = false;
-            requestPermissions = true;
+                || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED ) {
+            Toast.makeText(this, "No tiene los permisios necesarios.", Toast.LENGTH_LONG).show();
+            onBackPressed();
+            return;
         }
 
-        pwdSaved = false;
-
-        try {
-            encryptedPrefs = Utils.getEncryptedPrefs(getApplicationContext());
-        } catch (Exception e) {
-            cmdLogin.setEnabled(false);
-        }
-        try {
-            String myPwd = encryptedPrefs.getString("pwd", null);
-            pwdSaved = (myPwd != null && myPwd.length() > 0);
-        } catch (Exception e) {/**/}
-
-        findViewById(R.id.secondPwd).setVisibility(pwdSaved ? View.GONE : View.VISIBLE);
-        ((TextView)findViewById(R.id.lblHelp)).setText(pwdSaved ? R.string.enter_pwd : R.string.enter_pwd_new);
-        if (hasBiometric && pwdSaved) {
-            if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean("use_biometric", false)) {
-                findViewById(R.id.cmdBiometric).setVisibility(View.VISIBLE);
-                withBiometric();
-            }
-        }
-        if (requestPermissions) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.USE_BIOMETRIC,
-            }, 1111);
-        }
+        withBiometric();
     }
 
     @Override
@@ -147,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 //error authenticating, stop tasks that requires auth
-                if (!getString(R.string.use_password).equals(errString.toString())) {
+                if (getString(R.string.use_password).equals(errString.toString())) {
+                    onBackPressed();
+                } else {
                     Toast.makeText(MainActivity.this, "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -157,13 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onAuthenticationSucceeded(result);
                 //authentication succeed, continue tasts that requires auth
                 try {
-                    String key = null;
-                    if (hasBiometric) {
-                        key = encryptedPrefs.getString("pwd", null);
-                    }
-                    if (key != null) {
-                        new MainActivity.BackTask(key).execute();
-                    }
+                    new MainActivity.BackTask().execute();
                 } catch (Exception e) {/**/}
             }
 
@@ -187,51 +97,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class BackTask {
-        private final String pwd;
-        private final AlertDialog.Builder dialog;
-        boolean pwdOk = false;
-
-        public BackTask(String pass) {
-            dialog = new AlertDialog.Builder(MainActivity.this);
-            this.pwd = pass;
+        public BackTask() {
         }
 
         public void execute() {
-            new Thread(() -> {
-                try {
-                    if (pwdSaved) {
-                        String pwdReaded = encryptedPrefs.getString("pwd", "");
-                        pwdOk = pwdReaded.equals(this.pwd);
-                    } else {
-                        pwdOk = true;
-                    }
-                } catch (Exception e) {
-                    //nothing
-                }
-
-                runOnUiThread(() -> {
-                    if (pwdOk) {
-                        try {
-                            SharedPreferences.Editor editor = encryptedPrefs.edit();
-                            editor.putString("pwd", pwd);
-                            editor.apply();
-                            editor.commit();
-                        } catch (Exception e) {/**/}
-
-                        startActivity(new Intent(getApplicationContext(), AccountsActivity.class));
-                        finish();
-                    } else {
-                        dialog.setTitle(R.string.app_name)
-                                .setMessage(R.string.login_failed)
-                                .setCancelable(false)
-                                .setPositiveButton(android.R.string.ok, (dlg, id) -> {
-                                    dlg.dismiss();
-                                    ((EditText)findViewById(R.id.password)).setText("");
-                                });
-                        dialog.show();
-                    }
-                });
-            }).start();
+            new Thread(() -> runOnUiThread(() -> {
+                startActivity(new Intent(getApplicationContext(), AccountsActivity.class));
+                finish();
+            })).start();
         }
     }
 }

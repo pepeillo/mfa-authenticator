@@ -51,7 +51,7 @@
     <string name="enter_pwd_new">Enter your password and repeat it to access. From that moment on, that will be your input password and the data files will be encrypted with it.</string>
     <string name="export_to_encrypted">You are going to export all accounts to an encrypted file. Are you sure?</string>
     <string name="select_a_file">Select a file</string>
-    <string name="import_from_encrypted">You are going to import accounts from an encrypted file. Are you sure?</string>
+    <string name="import_from_encrypted">You are going to import accounts from an non-encrypted file. Are you sure?</string>
     <string name="link_bierbaumer" translatable="false"><a href="https://github.com/0xbb">Bruno Bierbaumer</a></string>
     <string name="link_commons_codec" translatable="false"><a href="https://commons.apache.org/proper/commons-codec/">Apache Commons Codec</a></string>
     <string name="link_zxing" translatable="false"><a href="https://github.com/zxing/zxing">ZXing</a></string>
@@ -64,6 +64,7 @@
     <string name="err_editing_account">Error editing account.</string>
     <string name="err_importing_accounts">Error importing accounts.</string>
     <string name="err_deleting_account">Error deleting account.</string>
+    <string name="prompt_file">File</string>
 
 
     <string-array name="algorithms">
@@ -76,5 +77,7 @@
         <item>30</item>
         <item>60</item>
     </string-array>
+    <string name="process_ok">Process finished successfully.</string>
+    <string name="prompt_process_err">Process finished with errors.</string>
 
 </resources>

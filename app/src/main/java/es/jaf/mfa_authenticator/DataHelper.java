@@ -43,7 +43,7 @@ public class DataHelper {
         return accounts;
     }
 
-    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os) throws Exception{
+    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os, String password) throws Exception{
         JSONArray a = new JSONArray();
         for(Pair<Integer, AccountStruc> p: accounts){
             AccountStruc acc = p.second;
@@ -53,14 +53,14 @@ public class DataHelper {
                 Utils.saveException("Converting '" + p.second + "' to json " + acc, e1);
             }
         }
-        String pwd = Utils.getEncryptedPrefs(context.getApplicationContext()).getString("pwd", null);
 
         byte[] data = a.toString().getBytes();
 
-        SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, pwd, new File(context.getFilesDir() + "/" + KEY_FILE));
-        data = EncryptionHelper.encrypt(key,data);
-        data = android.util.Base64.encode(data, android.util.Base64.NO_WRAP);
-
+        if (password != null && password.length() > 0) {
+            SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, password, new File(context.getFilesDir() + "/" + KEY_FILE));
+            data = EncryptionHelper.encrypt(key, data);
+            data = android.util.Base64.encode(data, android.util.Base64.NO_WRAP);
+        }
         Utils.writeFully(os, data);
     }
 
