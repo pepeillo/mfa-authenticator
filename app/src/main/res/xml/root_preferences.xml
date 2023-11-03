@@ -8,6 +8,8 @@
         <SwitchPreferenceCompat
                 app:iconSpaceReserved="false"
                 app:key="use_biometric"
+                app:defaultValue="true"
+                app:enabled="false"
                 app:title="@string/usebiometric.title"
                 app:summaryOn="@string/usebiometric.on"
                 app:summaryOff="@string/usebiometric.off"/>
