@@ -64,18 +64,18 @@ public class DataHelper {
         Utils.writeFully(os, data);
     }
 
-    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is) throws Exception {
+    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is, String password) throws Exception {
         byte[] data = null;
         if (is != null) {
             data = Utils.readFully(is);
             data = android.util.Base64.decode(data, android.util.Base64.NO_WRAP);
         }
 
-        String pwd = Utils.getEncryptedPrefs(context.getApplicationContext()).getString("pwd", null);
-
-        SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, pwd, new File(context.getFilesDir() + "/" + KEY_FILE));
-        if (data != null) {
-            data = EncryptionHelper.decrypt(key, data);
+        if (password != null && password.length() > 0) {
+            SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, password, new File(context.getFilesDir() + "/" + KEY_FILE));
+            if (data != null) {
+                data = EncryptionHelper.decrypt(key, data);
+            }
         }
 
         ArrayList<Pair<Integer, AccountStruc>> accounts = new ArrayList<>();

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
 
         if (!(canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS)) {
-            onBackPressed();
+            Toast.makeText(this, "No tienes autenticación biométrica.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
                 || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED ) {
             Toast.makeText(this, "No tiene los permisios necesarios.", Toast.LENGTH_LONG).show();
-            onBackPressed();
+            //android.os.Process.killProcess(Process.myPid());
+            //finish();
             return;
         }
 

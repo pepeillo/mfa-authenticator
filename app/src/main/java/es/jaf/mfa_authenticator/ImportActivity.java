@@ -106,7 +106,7 @@ public class ImportActivity extends AppCompatActivity {
     private void importFile(String path, String password) {
         try (InputStream is = getContentResolver().openInputStream(Uri.parse(path))) {
             ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
-            accounts.addAll(DataHelper.importFile(this, is));
+            accounts.addAll(DataHelper.importFile(this, is, password));
             DataHelper.store(this, accounts);
         } catch (Exception e) {
             Utils.saveException("Importing file", e);
