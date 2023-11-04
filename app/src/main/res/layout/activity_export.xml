@@ -17,10 +17,18 @@
                 android:paddingRight="10dp"
                 android:text="@string/prompt_password"/>
         <EditText
+                android:layout_weight="1"
                 android:id="@+id/txtpassword"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+        <ImageView
+                android:id="@+id/cmdHideShow"
+                android:src="@drawable/hide"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
     </LinearLayout>
         <LinearLayout
                 android:layout_marginTop="15dp"

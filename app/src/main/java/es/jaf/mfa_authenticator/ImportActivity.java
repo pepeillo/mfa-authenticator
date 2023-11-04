@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +54,17 @@ public class ImportActivity extends AppCompatActivity {
                 } else {
                     performImport(path, password);
                 }
+            }
+        });
+
+        final ImageView cmdHideShow = findViewById(R.id.cmdHideShow);
+        cmdHideShow.setOnClickListener(view -> {
+            if (txtPassword.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                txtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                cmdHideShow.setImageResource(R.drawable.show);
+            } else {
+                txtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                cmdHideShow.setImageResource(R.drawable.hide);
             }
         });
     }
