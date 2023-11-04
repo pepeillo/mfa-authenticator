@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Process;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
@@ -37,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
                 || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED ) {
             Toast.makeText(this, "No tiene los permisios necesarios.", Toast.LENGTH_LONG).show();
-            //android.os.Process.killProcess(Process.myPid());
-            //finish();
             return;
         }
 
+        findViewById(R.id.cmdbiometrics).setOnClickListener(view -> withBiometric());
         withBiometric();
     }
+
 
     @Override
     public void onBackPressed() {

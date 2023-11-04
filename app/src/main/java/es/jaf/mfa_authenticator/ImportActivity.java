@@ -1,9 +1,7 @@
 package es.jaf.mfa_authenticator;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
@@ -12,8 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,13 +31,6 @@ public class ImportActivity extends AppCompatActivity {
         cmdImport = findViewById(R.id.cmdImport);
 
         findViewById(R.id.cmdSelect).setOnClickListener(v -> {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-                Snackbar.make(cmdImport, "No hay permisos asignados.", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-
             Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, getString(R.string.select_a_file)), ACTION_IMPORT);
         });
@@ -62,7 +51,6 @@ public class ImportActivity extends AppCompatActivity {
                 } else {
                     performImport(path, password);
                 }
-
             }
         });
     }
@@ -106,7 +94,7 @@ public class ImportActivity extends AppCompatActivity {
     private void importFile(String path, String password) {
         try (InputStream is = getContentResolver().openInputStream(Uri.parse(path))) {
             ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
-            accounts.addAll(DataHelper.importFile(this, is, password));
+            accounts.addAll(DataHelper.importFile(is, password));
             DataHelper.store(this, accounts);
         } catch (Exception e) {
             Utils.saveException("Importing file", e);

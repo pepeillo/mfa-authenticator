@@ -18,10 +18,17 @@ package es.jaf.mfa_authenticator;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,6 +73,30 @@ public class Utils {
                 appContext,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+    }
+
+    public static byte[] encrypt(byte[] data, String password) throws GeneralSecurityException, UnsupportedEncodingException {
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
+        Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
+        pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec("PPRMYSDAEWUAQLISH3GK".getBytes(StandardCharsets.UTF_8), 20));
+        return base64Encode(pbeCipher.doFinal(data));
+    }
+
+    private static byte[] base64Encode(byte[] bytes) {
+        return Base64.encode(bytes, android.util.Base64.NO_WRAP);
+    }
+
+    public static byte[] decrypt(byte[] data, String password) throws GeneralSecurityException, IOException {
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
+        Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
+        pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec("PPRMYSDAEWUAQLISH3GK".getBytes(StandardCharsets.UTF_8), 20));
+        return pbeCipher.doFinal(base64Decode(data));
+    }
+
+    private static byte[] base64Decode(byte[] data) throws IOException {
+        return android.util.Base64.decode(data, android.util.Base64.NO_WRAP);
     }
 
     static void saveException(String text, Exception ex) {

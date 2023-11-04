@@ -1,30 +1,15 @@
 package es.jaf.mfa_authenticator;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceFragmentCompat;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
-    private static final int ACTION_EXPORT = 123;
-    private static final int ACTION_IMPORT = 124;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -24,7 +24,7 @@
     <string name="str_digits">Digits</string>
     <string name="str_secret">Secret</string>
     <string name="login_failed">The login has failed.</string>
-    <string name="use_password">Use password</string>
+    <string name="use_password">Cancel</string>
     <string name="prompt_password">Password</string>
     <string name="bioAuth">Biometric Authentication</string>
     <string name="bioAuthSub">Login using fingerprint authentication</string>
@@ -57,7 +57,7 @@
     <string name="link_zxing" translatable="false"><a href="https://github.com/zxing/zxing">ZXing</a></string>
     <string name="link_zxing_embedded" translatable="false"><a href="https://github.com/journeyapps/zxing-android-embedded">ZXing Android Embedded</a></string>
     <string name="link_draglistview" translatable="false"><a href="https://github.com/woxblom/DragListView">DragListView</a></string>
-    <string name="or_biometric">or <a href="">connect using biometrics</a></string>
+    <string name="or_biometric">Connect using biometrics</string>
     <string name="acknowledgments">Acknowledgments</string>
     <string name="err_loading_accounts">Error loading accounts.</string>
     <string name="err_dropping_account">Error dropping account.</string>

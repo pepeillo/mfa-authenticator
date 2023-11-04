@@ -6,14 +6,12 @@ import android.util.Pair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import javax.crypto.SecretKey;
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class DataHelper {
-    public static final String KEY_FILE = "otp.key";
     public static final String OTP_NONE = "------";
 
     public static void store(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts) throws Exception{
@@ -43,49 +41,42 @@ public class DataHelper {
         return accounts;
     }
 
-    public static void exportFile(Context context, ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os, String password) throws Exception{
-        JSONArray a = new JSONArray();
-        for(Pair<Integer, AccountStruc> p: accounts){
-            AccountStruc acc = p.second;
+    public static void exportFile(ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os, String password) throws Exception{
+        JSONArray arr = new JSONArray();
+        for(Pair<Integer, AccountStruc> pair: accounts){
+            AccountStruc acc = pair.second;
             try {
-                a.put(acc.toJSON());
+                arr.put(acc.toJSON());
             } catch (JSONException e1) {
-                Utils.saveException("Converting '" + p.second + "' to json " + acc, e1);
+                Utils.saveException("Converting '" + pair.second + "' to json " + acc, e1);
             }
         }
 
-        byte[] data = a.toString().getBytes();
+        byte[] data = arr.toString().getBytes(StandardCharsets.UTF_8);
 
-        if (password != null && password.length() > 0) {
-            SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, password, new File(context.getFilesDir() + "/" + KEY_FILE));
-            data = EncryptionHelper.encrypt(key, data);
-            data = android.util.Base64.encode(data, android.util.Base64.NO_WRAP);
+        if (password != null && password.length() > 0 && data != null) {
+            data = Utils.encrypt(data, password);
         }
         Utils.writeFully(os, data);
     }
 
-    public static ArrayList<Pair<Integer, AccountStruc>> importFile(Context context, InputStream is, String password) throws Exception {
+    public static ArrayList<Pair<Integer, AccountStruc>> importFile(InputStream is, String password) throws Exception {
         byte[] data = null;
         if (is != null) {
             data = Utils.readFully(is);
-            data = android.util.Base64.decode(data, android.util.Base64.NO_WRAP);
         }
 
-        if (password != null && password.length() > 0) {
-            SecretKey key = EncryptionHelper.loadOrGenerateKeys(context, password, new File(context.getFilesDir() + "/" + KEY_FILE));
-            if (data != null) {
-                data = EncryptionHelper.decrypt(key, data);
-            }
+        if (password != null && password.length() > 0 && data != null) {
+            data = Utils.decrypt(data, password);
         }
 
         ArrayList<Pair<Integer, AccountStruc>> accounts = new ArrayList<>();
         if (data != null) {
-            JSONArray arr = new JSONArray(new String(data));
+            JSONArray arr = new JSONArray(new String(data, StandardCharsets.UTF_8));
             for (int i = 0; i < arr.length(); i++) {
                 accounts.add(new Pair<>(i, new AccountStruc(arr.getJSONObject(i))));
             }
         }
-
         return accounts;
     }
 }

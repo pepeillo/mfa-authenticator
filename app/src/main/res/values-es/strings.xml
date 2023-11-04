@@ -23,7 +23,7 @@
     <string name="str_digits">Número de dígitos</string>
     <string name="str_secret">Código secreto</string>
     <string name="login_failed">Credenciales incorrectas.</string>
-    <string name="use_password">Usar contraseña</string>
+    <string name="use_password">Cancelar</string>
     <string name="prompt_password">Contraseña</string>
     <string name="bioAuth">Autenticación biométrica</string>
     <string name="bioAuthSub">Conectar usando la huella dactilar</string>
@@ -53,7 +53,7 @@
         continuar?.
     </string>
     <string name="select_a_file">Selecciona un fichero</string>
-    <string name="or_biometric">o <a href="">conectar usando biometría</a></string>
+    <string name="or_biometric">Conectar usando biometría</string>
     <string name="acknowledgments">Agradecimientos</string>
     <string name="err_loading_accounts">Error cargando las cuentas.</string>
     <string name="err_dropping_account">Error moviendo la cuenta.</string>

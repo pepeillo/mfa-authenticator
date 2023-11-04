@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class AccountStruc {
     public static final String JSON_LABEL = "label";
@@ -190,7 +191,7 @@ public class AccountStruc {
         AccountStruc account = (AccountStruc) o;
 
         if (!Arrays.equals(secret, account.secret)) return false;
-        return !( (this.account != null) ? !this.account.equals(account.account) : (account.account != null) );
+        return Objects.equals(this.account, account.account);
 
     }
 
