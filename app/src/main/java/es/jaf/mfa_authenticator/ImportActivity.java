@@ -1,5 +1,6 @@
 package es.jaf.mfa_authenticator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import net.lingala.zip4j.io.inputstream.ZipInputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ImportActivity extends AppCompatActivity {
-    private static final int ACTION_IMPORT = 124;
-
     private View cmdImport;
     private TextView txtFile;
     private EditText txtPassword;
@@ -35,7 +37,7 @@ public class ImportActivity extends AppCompatActivity {
 
         findViewById(R.id.cmdSelect).setOnClickListener(v -> {
             Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_a_file)), ACTION_IMPORT);
+            startActivityForResult(Intent.createChooser(intent, ImportActivity.this.getString(R.string.select_a_file)), Utils.FILE_OR_FOLDER_PICKER_CODE);
         });
 
         cmdImport.setOnClickListener(v -> {
@@ -71,12 +73,18 @@ public class ImportActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (resultCode == RESULT_OK && requestCode == ACTION_IMPORT) {
-            Uri uri = (intent == null) ? null : intent.getData();
-            if (uri != null) {
-                txtFile.setText(uri.toString());
-                cmdImport.setEnabled(true);
+        if (requestCode == Utils.FILE_OR_FOLDER_PICKER_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = intent.getData();
+
+            String path = null;
+            try {
+                path = FileUtils.getPath(ImportActivity.this, uri);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            txtFile.setText(path == null ? "" : path);
+            cmdImport.setEnabled(true);
         }
     }
 
@@ -106,7 +114,55 @@ public class ImportActivity extends AppCompatActivity {
     }
 
     private void importFile(String path, String password) {
-        try (InputStream is = getContentResolver().openInputStream(Uri.parse(path))) {
+        File tmpFile = new File(Uri.parse(path).getPath());
+        ZipInputStream zis = null;
+        try {
+            ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
+            if (password == null || password.length() == 0) {
+                zis = new ZipInputStream(new FileInputStream(tmpFile));
+            } else {
+                zis = new ZipInputStream(new FileInputStream(tmpFile), password.toCharArray());
+            }
+            while (zis.getNextEntry() != null) {
+                byte[] bytes;
+                try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[1024];
+                    int count;
+                    while ((count = zis.read(buffer)) != -1) {
+                        baos.write(buffer, 0, count);
+                    }
+
+                    bytes = baos.toByteArray();
+                }
+
+                try (BufferedReader bR = new BufferedReader(  new InputStreamReader(new ByteArrayInputStream(bytes)))) {
+                    String line;
+                    StringBuilder responseStrBuilder = new StringBuilder();
+                    while((line =  bR.readLine()) != null){
+                        responseStrBuilder.append(line);
+                    }
+
+                    JSONArray jsArray = new JSONArray(responseStrBuilder.toString());
+                    for (int i = 0; i < jsArray.length(); i++) {
+                        JSONObject ae = (JSONObject) jsArray.get(i);
+                        accounts.add(new Pair<>(accounts.size(), new AccountStruc(ae)));
+                    }
+                }
+            }
+            DataHelper.store(ImportActivity.this, accounts);
+        } catch (Exception e) {
+            Utils.saveException("Error", e);
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+        } finally {
+            if (zis != null) {
+                try {
+                    zis.close();
+                } catch (IOException e) {/**/}
+            }
+        }
+        //return counter;
+
+/*        try (InputStream is = getContentResolver().openInputStream(Uri.parse(path))) {
             ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
             accounts.addAll(DataHelper.importFile(is, password));
             DataHelper.store(this, accounts);
@@ -114,5 +170,6 @@ public class ImportActivity extends AppCompatActivity {
             Utils.saveException("Importing file", e);
             Toast.makeText(this, "Error importing file. " + e, Toast.LENGTH_SHORT).show();
         }
+ */
     }
 }

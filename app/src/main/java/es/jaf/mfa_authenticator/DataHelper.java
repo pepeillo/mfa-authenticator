@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class DataHelper {
@@ -36,45 +32,6 @@ public class DataHelper {
             for (int i = 0; i < arr.length(); i++) {
                 AccountStruc elem = new AccountStruc(arr.getJSONObject(i));
                 accounts.add(new Pair<>(i, elem));
-            }
-        }
-        return accounts;
-    }
-
-    public static void exportFile(ArrayList<Pair<Integer, AccountStruc>> accounts, OutputStream os, String password) throws Exception{
-        JSONArray arr = new JSONArray();
-        for(Pair<Integer, AccountStruc> pair: accounts){
-            AccountStruc acc = pair.second;
-            try {
-                arr.put(acc.toJSON());
-            } catch (JSONException e1) {
-                Utils.saveException("Converting '" + pair.second + "' to json " + acc, e1);
-            }
-        }
-
-        byte[] data = arr.toString().getBytes(StandardCharsets.UTF_8);
-
-        if (password != null && password.length() > 0 && data != null) {
-            data = Utils.encrypt(data, password);
-        }
-        Utils.writeFully(os, data);
-    }
-
-    public static ArrayList<Pair<Integer, AccountStruc>> importFile(InputStream is, String password) throws Exception {
-        byte[] data = null;
-        if (is != null) {
-            data = Utils.readFully(is);
-        }
-
-        if (password != null && password.length() > 0 && data != null) {
-            data = Utils.decrypt(data, password);
-        }
-
-        ArrayList<Pair<Integer, AccountStruc>> accounts = new ArrayList<>();
-        if (data != null) {
-            JSONArray arr = new JSONArray(new String(data, StandardCharsets.UTF_8));
-            for (int i = 0; i < arr.length(); i++) {
-                accounts.add(new Pair<>(i, new AccountStruc(arr.getJSONObject(i))));
             }
         }
         return accounts;

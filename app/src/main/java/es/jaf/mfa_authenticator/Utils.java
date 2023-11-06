@@ -18,50 +18,16 @@ package es.jaf.mfa_authenticator;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
-    public static byte[] readFully(File file) throws IOException {
-        if (!(file).exists()) {
-            return null;
-        }
-        try (final InputStream is = new FileInputStream(file)) {
-            return readFully(is);
-        }
-    }
-
-    public static byte[] readFully(InputStream is) throws IOException {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int count;
-        while ((count = is.read(buffer)) != -1) {
-            bytes.write(buffer, 0, count);
-        }
-        return bytes.toByteArray();
-    }
-
-    public static void writeFully(File file, byte[] data) throws Exception {
-        try (OutputStream out = new FileOutputStream(file, false)) {
-            out.write(data);
-        }
-    }
-
-    public static void writeFully(OutputStream os, byte[] data) throws IOException {
-        os.write(data);
-    }
+    public static final int FILE_OR_FOLDER_PICKER_CODE = 2;
 
     protected static SharedPreferences getEncryptedPrefs(Context appContext) throws GeneralSecurityException, IOException {
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
@@ -73,30 +39,6 @@ public class Utils {
                 appContext,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-    }
-
-    public static byte[] encrypt(byte[] data, String password) throws GeneralSecurityException, UnsupportedEncodingException {
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
-        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
-        Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-        pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec("PPRMYSDAEWUAQLISH3GK".getBytes(StandardCharsets.UTF_8), 20));
-        return base64Encode(pbeCipher.doFinal(data));
-    }
-
-    private static byte[] base64Encode(byte[] bytes) {
-        return Base64.encode(bytes, android.util.Base64.NO_WRAP);
-    }
-
-    public static byte[] decrypt(byte[] data, String password) throws GeneralSecurityException, IOException {
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
-        SecretKey key = keyFactory.generateSecret(new PBEKeySpec(password.toCharArray()));
-        Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-        pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec("PPRMYSDAEWUAQLISH3GK".getBytes(StandardCharsets.UTF_8), 20));
-        return pbeCipher.doFinal(base64Decode(data));
-    }
-
-    private static byte[] base64Decode(byte[] data) throws IOException {
-        return android.util.Base64.decode(data, android.util.Base64.NO_WRAP);
     }
 
     static void saveException(String text, Exception ex) {
