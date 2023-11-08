@@ -225,9 +225,11 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
         switch (id) {
             case R.id.action_delete:
-                return deleteAccount();
+                deleteAccount();
+                return true;
             case R.id.action_edit:
-                return editAccount();
+                editAccount();
+                return true;
             default:
                 return false;
         }
@@ -386,7 +388,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         dlg.show();
     }
 
-    private boolean editAccount() {
+    private void editAccount() {
         AccountStruc account = nextSelection.second;
         Intent intent = new Intent(this, AccountEditActivity.class);
         intent.putExtra("label", account.getLabel());
@@ -412,7 +414,6 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         intent.putExtra("locked", account.isFavourite());
         intent.putExtra("secret", new String(new Base32().encode(account.getSecret())));
         startActivityForResult(intent, ACTION_EDIT);
-        return true;
     }
 
     private void saveExistingAccount(Intent intent) {
@@ -436,10 +437,10 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         }
     }
 
-    private boolean deleteAccount() {
+    private void deleteAccount() {
         if (nextSelection.second.isFavourite()) {
             Snackbar.make(floatingButton, R.string.mag_not_removed_locked, Snackbar.LENGTH_LONG).show();
-            return true;
+            return;
         }
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle(getString(R.string.button_remove) + nextSelection.second.getLabel() + "?");
@@ -465,7 +466,6 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         });
 
         alert.show();
-        return true;
     }
 
     private void saveFromParameters(Intent intent) throws Exception {
