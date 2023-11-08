@@ -225,7 +225,6 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
