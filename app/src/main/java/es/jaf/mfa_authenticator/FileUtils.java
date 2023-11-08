@@ -35,8 +35,8 @@ public class FileUtils {
     public static String getPath(final Context context, final Uri uri) {
         // check here to KITKAT or new version
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        String selection = null;
-        String[] selectionArgs = null;
+        String selection;
+        String[] selectionArgs;
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
@@ -81,9 +81,6 @@ public class FileUtils {
                         for (String contentUriPrefix : contentUriPrefixesToTry) {
                             try {
                                 final Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
-
-                         /*   final Uri contentUri = ContentUris.withAppendedId(
-                                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));*/
 
                                 return getDataColumn(context, contentUri, null, null);
                             } catch (NumberFormatException e) {
@@ -234,7 +231,7 @@ public class FileUtils {
             File file = new File(context.getCacheDir(), name);
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
                 FileOutputStream outputStream = new FileOutputStream(file)) {
-                int read = 0;
+                int read;
                 int maxBufferSize = 1024 * 1024;
                 int bytesAvailable = inputStream.available();
 
@@ -267,7 +264,7 @@ public class FileUtils {
             File file = new File(context.getFilesDir(), name);
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
                 FileOutputStream outputStream = new FileOutputStream(file)) {
-                int read = 0;
+                int read;
                 int maxBufferSize = 1024 * 1024;
                 int bytesAvailable = inputStream.available();
 

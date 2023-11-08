@@ -44,7 +44,7 @@ public class Utils {
     static void saveException(String text, Exception ex) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-        File dir = null;
+        File dir;
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
             dir = new File(root.getAbsolutePath() + "/" + BuildConfig.APPLICATION_ID);

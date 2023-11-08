@@ -160,16 +160,5 @@ public class ImportActivity extends AppCompatActivity {
                 } catch (IOException e) {/**/}
             }
         }
-        //return counter;
-
-/*        try (InputStream is = getContentResolver().openInputStream(Uri.parse(path))) {
-            ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
-            accounts.addAll(DataHelper.importFile(is, password));
-            DataHelper.store(this, accounts);
-        } catch (Exception e) {
-            Utils.saveException("Importing file", e);
-            Toast.makeText(this, "Error importing file. " + e, Toast.LENGTH_SHORT).show();
-        }
- */
     }
 }
