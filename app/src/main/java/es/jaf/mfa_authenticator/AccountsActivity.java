@@ -231,38 +231,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         int id = item.getItemId();
 
         if (id == R.id.action_about) {
-            Dialog dialog = new Dialog(this){
-                @Override
-                protected void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                    setContentView(R.layout.about_dialog);
-
-                    ((TextView)findViewById(R.id.txtappname)).setText(getText(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
-                    findViewById(R.id.bierbaumer).setOnClickListener(view -> {
-                        Uri uri = Uri.parse("https://github.com/0xbb");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    });
-                    findViewById(R.id.linkcommons).setOnClickListener(view -> {
-                        Uri uri = Uri.parse("https://commons.apache.org/proper/commons-codec/");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    });
-                    findViewById(R.id.ZXing).setOnClickListener(view -> {
-                        Uri uri = Uri.parse("https://github.com/zxing/zxing");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    });
-                    findViewById(R.id.ZXingEmbedded).setOnClickListener(view -> {
-                        Uri uri = Uri.parse("https://github.com/journeyapps/zxing-android-embedded");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    });
-                    findViewById(R.id.draglistview).setOnClickListener(view -> {
-                        Uri uri = Uri.parse("https://github.com/woxblom/DragListView");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    });
-                }
-            };
-            dialog.setTitle(R.string.menu_about);
-            dialog.show();
-
+            getAboutDialog().show();
             return true;
         }
         if (id == R.id.action_settings) {
@@ -535,6 +504,40 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         accounts.add(new Pair<>(accounts.size(), account));
 
         DataHelper.store(this, accounts);
+    }
+
+    private Dialog getAboutDialog() {
+        Dialog dialog = new Dialog(this){
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.about_dialog);
+
+                ((TextView)findViewById(R.id.txtappname)).setText(getText(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
+                findViewById(R.id.bierbaumer).setOnClickListener(view -> {
+                    Uri uri = Uri.parse("https://github.com/0xbb");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
+                findViewById(R.id.linkcommons).setOnClickListener(view -> {
+                    Uri uri = Uri.parse("https://commons.apache.org/proper/commons-codec/");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
+                findViewById(R.id.ZXing).setOnClickListener(view -> {
+                    Uri uri = Uri.parse("https://github.com/zxing/zxing");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
+                findViewById(R.id.ZXingEmbedded).setOnClickListener(view -> {
+                    Uri uri = Uri.parse("https://github.com/journeyapps/zxing-android-embedded");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
+                findViewById(R.id.draglistview).setOnClickListener(view -> {
+                    Uri uri = Uri.parse("https://github.com/woxblom/DragListView");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
+            }
+        };
+        dialog.setTitle(R.string.menu_about);
+        return dialog;
     }
 
     private static class MyRunnable implements Runnable {
