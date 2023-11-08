@@ -164,59 +164,55 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == ACTION_EDIT) {
-            if (resultCode == Activity.RESULT_OK) {
-                saveExistingAccount(intent);
-            }
-            return;
-        }
-
-        if (requestCode == ACTION_NEW) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    saveFromParameters(intent);
-                } catch (Exception e) {
-                    Utils.saveException("Editing account", e);
-                    Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
-                }
-                adapter.notifyDataSetChanged();
-                if (actionMode != null) {
-                    actionMode.finish();
-                }
-            }
-            return;
-        }
-
-        if (requestCode == ACTION_SETTINGS) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    accounts = DataHelper.load(this);
-                } catch (Exception e) {
-                    Utils.saveException("Importing accounts", e);
-                    Snackbar.make(floatingButton, R.string.err_importing_accounts, Snackbar.LENGTH_LONG).show();
-                }
-                adapter.setItemList(accounts);
-                adapter.notifyDataSetChanged();
-            }
-        }
-
-        if (requestCode == IntentIntegrator.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            try {
-                AccountStruc e = new AccountStruc(intent.getStringExtra(Intents.Scan.RESULT));
-                e.setCurrentOTP(DataHelper.OTP_NONE);
-                accounts.add(new Pair<>(accounts.size(), e));
-                DataHelper.store(this, accounts);
-
-                adapter.notifyDataSetChanged();
-
-                Snackbar.make(floatingButton, R.string.msg_account_added, Snackbar.LENGTH_LONG).show();
-            } catch (Exception e) {
-                Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        super.onDismissed(snackbar, event);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case ACTION_NEW:
+                    try {
+                        saveFromParameters(intent);
+                    } catch (Exception e) {
+                        Utils.saveException("Editing account", e);
+                        Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
                     }
-                }).show();
+                    adapter.notifyDataSetChanged();
+                    if (actionMode != null) {
+                        actionMode.finish();
+                    }
+                    break;
+
+                case ACTION_EDIT:
+                    saveExistingAccount(intent);
+                    break;
+
+                case ACTION_SETTINGS:
+                    try {
+                        accounts = DataHelper.load(this);
+                    } catch (Exception e) {
+                        Utils.saveException("Importing accounts", e);
+                        Snackbar.make(floatingButton, R.string.err_importing_accounts, Snackbar.LENGTH_LONG).show();
+                    }
+                    adapter.setItemList(accounts);
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case IntentIntegrator.REQUEST_CODE:
+                    try {
+                        AccountStruc e = new AccountStruc(intent.getStringExtra(Intents.Scan.RESULT));
+                        e.setCurrentOTP(DataHelper.OTP_NONE);
+                        accounts.add(new Pair<>(accounts.size(), e));
+                        DataHelper.store(this, accounts);
+
+                        adapter.notifyDataSetChanged();
+
+                        Snackbar.make(floatingButton, R.string.msg_account_added, Snackbar.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                            }
+                        }).show();
+                    }
+                    break;
             }
         }
     }
@@ -261,14 +257,15 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     public boolean onActionItemClicked(final ActionMode actionMode, MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        if (id == R.id.action_delete) {
-            return deleteAccount();
-
-        } else if (id == R.id.action_edit) {
-            editAccount();
-            return true;
+        switch (id) {
+            case R.id.action_delete:
+                return deleteAccount();
+            case R.id.action_edit:
+                editAccount();
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
