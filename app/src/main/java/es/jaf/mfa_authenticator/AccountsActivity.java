@@ -170,6 +170,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             }
             return;
         }
+
         if (requestCode == ACTION_NEW) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
@@ -185,6 +186,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             }
             return;
         }
+
         if (requestCode == ACTION_SETTINGS) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
