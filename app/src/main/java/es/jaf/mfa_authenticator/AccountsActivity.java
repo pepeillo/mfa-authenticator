@@ -31,6 +31,8 @@ import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 import org.apache.commons.codec.binary.Base32;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class AccountsActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
@@ -41,6 +43,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     DragListView listView;
 
     private static final int PERMISSIONS_REQUEST_CAMERA = 42;
+    private static final int ACTION_NEW = 101;
     private static final int ACTION_EDIT = 102;
     private static final int ACTION_SETTINGS = 103;
     private ActionMode actionMode;
@@ -95,7 +98,31 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         setSupportActionBar(toolbar);
 
         floatingButton = findViewById(R.id.action_scan);
-        floatingButton.setOnClickListener(view -> AccountsActivity.this.scanQRCode());
+        floatingButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(AccountsActivity.this);
+            builder.setTitle(R.string.prompt_options)
+                    .setCancelable(true)
+                    .setItems(R.array.create_options, (dialog, which) -> {
+                        if (which == 0) {
+                            Intent intent = new Intent(AccountsActivity.this, AccountEditActivity.class);
+                            intent.setAction("NEW");
+                            intent.putExtra("algorithm", 0);
+                            intent.putExtra("period", 1);
+                            intent.putExtra("digits", 6);
+                            intent.putExtra("locked", false);
+                            startActivityForResult(intent, ACTION_NEW);
+                        } else {
+                            AccountsActivity.this.scanQRCode();
+                        }
+                    });
+            Dialog dlg = builder.create();
+            Window window = dlg.getWindow();
+            WindowManager.LayoutParams wlp = window.getAttributes();
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+            dlg.show();
+        });
 
         try {
             accounts = DataHelper.load(this);
@@ -140,21 +167,19 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
         if (requestCode == ACTION_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
-                AccountStruc account = nextSelection.second;
-                account.setLabel(intent.getStringExtra("label"));
-                account.setAccount(intent.getStringExtra("account"));
-                account.setIssuer(intent.getStringExtra("issuer"));
-                account.setAlgorithm(intent.getStringExtra("algorithm"));
-                account.setPeriod(intent.getIntExtra("period", 30));
-                account.setDigits(intent.getIntExtra("digits", 6));
-                account.setFavourite(intent.getBooleanExtra("locked", false));
+                saveExistingAccount(intent);
+            }
+            return;
+        }
+        if (requestCode == ACTION_NEW) {
+            if (resultCode == Activity.RESULT_OK) {
                 try {
-                    DataHelper.store(this, accounts);
+                    saveFromParameters(intent);
                 } catch (Exception e) {
                     Utils.saveException("Editing account", e);
                     Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
                 }
-                    adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 if (actionMode != null) {
                     actionMode.finish();
                 }
@@ -268,70 +293,10 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         int id = menuItem.getItemId();
 
         if (id == R.id.action_delete) {
-            if (nextSelection.second.isFavourite()) {
-                Snackbar.make(floatingButton, R.string.mag_not_removed_locked, Snackbar.LENGTH_LONG).show();
-                return true;
-            }
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle(getString(R.string.button_remove) + nextSelection.second.getLabel() + "?");
-            alert.setMessage(R.string.msg_confirm_delete);
-
-            alert.setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    accounts.remove(nextSelection);
-                    try {
-                        DataHelper.store(AccountsActivity.this, accounts);
-
-                        Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                super.onDismissed(snackbar, event);
-                            }
-                        }).show();
-                    } catch (Exception e) {
-                        Utils.saveException("Deleting account.", e);
-                        Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
-                    }
-                    adapter.notifyDataSetChanged();
-                    actionMode.finish();
-                }
-            });
-
-            alert.setNegativeButton(R.string.button_cancel, (dialog, whichButton) -> {
-                dialog.cancel();
-                actionMode.finish();
-            });
-
-            alert.show();
-
-            return true;
+            return deleteAccount();
 
         } else if (id == R.id.action_edit) {
-            AccountStruc account = nextSelection.second;
-            Intent intent = new Intent(this, AccountEditActivity.class);
-            intent.putExtra("label", account.getLabel());
-            intent.putExtra("account", account.getAccount());
-            intent.putExtra("issuer", account.getIssuer());
-            String tmp = account.getAlgorithm();
-            if ("SHA256".equalsIgnoreCase(tmp)) {
-                intent.putExtra("algorithm", 1);
-            } else if ("SHA512".equalsIgnoreCase(tmp)) {
-                intent.putExtra("algorithm", 2);
-            } else {
-                intent.putExtra("algorithm", 0);
-            }
-            int intTmp = account.getPeriod();
-            if (intTmp == 15) {
-                intent.putExtra("period", 0);
-            } else if (intTmp == 60) {
-                intent.putExtra("period", 2);
-            } else {
-                intent.putExtra("period", 1);
-            }
-            intent.putExtra("digits", account.getDigits());
-            intent.putExtra("locked", account.isFavourite());
-            intent.putExtra("secret", new String(new Base32().encode(account.getSecret())));
-            startActivityForResult(intent, ACTION_EDIT);
+            editAccount();
             return true;
         }
         return false;
@@ -461,6 +426,116 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     private void exit() {
         finish();
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    private void editAccount() {
+        AccountStruc account = nextSelection.second;
+        Intent intent = new Intent(this, AccountEditActivity.class);
+        intent.putExtra("label", account.getLabel());
+        intent.putExtra("account", account.getAccount());
+        intent.putExtra("issuer", account.getIssuer());
+        String tmp = account.getAlgorithm();
+        if ("SHA256".equalsIgnoreCase(tmp)) {
+            intent.putExtra("algorithm", 1);
+        } else if ("SHA512".equalsIgnoreCase(tmp)) {
+            intent.putExtra("algorithm", 2);
+        } else {
+            intent.putExtra("algorithm", 0);
+        }
+        int intTmp = account.getPeriod();
+        if (intTmp == 15) {
+            intent.putExtra("period", 0);
+        } else if (intTmp == 60) {
+            intent.putExtra("period", 2);
+        } else {
+            intent.putExtra("period", 1);
+        }
+        intent.putExtra("digits", account.getDigits());
+        intent.putExtra("locked", account.isFavourite());
+        intent.putExtra("secret", new String(new Base32().encode(account.getSecret())));
+        startActivityForResult(intent, ACTION_EDIT);
+    }
+
+    private void saveExistingAccount(Intent intent) {
+        AccountStruc account = nextSelection.second;
+        account.setLabel(intent.getStringExtra("label"));
+        account.setAccount(intent.getStringExtra("account"));
+        account.setIssuer(intent.getStringExtra("issuer"));
+        account.setAlgorithm(intent.getStringExtra("algorithm"));
+        account.setPeriod(intent.getIntExtra("period", 30));
+        account.setDigits(intent.getIntExtra("digits", 6));
+        account.setFavourite(intent.getBooleanExtra("locked", false));
+        try {
+            DataHelper.store(this, accounts);
+        } catch (Exception e) {
+            Utils.saveException("Editing account", e);
+            Snackbar.make(floatingButton, R.string.err_editing_account, Snackbar.LENGTH_LONG).show();
+        }
+        adapter.notifyDataSetChanged();
+        if (actionMode != null) {
+            actionMode.finish();
+        }
+    }
+
+    private boolean deleteAccount() {
+        if (nextSelection.second.isFavourite()) {
+            Snackbar.make(floatingButton, R.string.mag_not_removed_locked, Snackbar.LENGTH_LONG).show();
+            return true;
+        }
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(getString(R.string.button_remove) + nextSelection.second.getLabel() + "?");
+        alert.setMessage(R.string.msg_confirm_delete);
+
+        alert.setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                accounts.remove(nextSelection);
+                try {
+                    DataHelper.store(AccountsActivity.this, accounts);
+
+                    Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            super.onDismissed(snackbar, event);
+                        }
+                    }).show();
+                } catch (Exception e) {
+                    Utils.saveException("Deleting account.", e);
+                    Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
+                }
+                adapter.notifyDataSetChanged();
+                actionMode.finish();
+            }
+        });
+
+        alert.setNegativeButton(R.string.button_cancel, (dialog, whichButton) -> {
+            dialog.cancel();
+            actionMode.finish();
+        });
+
+        alert.show();
+        return true;
+    }
+
+    private void saveFromParameters(Intent intent) throws Exception {
+        String label = intent.getStringExtra("label");
+        String algorithm = intent.getStringExtra("algorithm");
+        int period = intent.getIntExtra("period", 30);
+        int digits = intent.getIntExtra("digits", 6);
+        String secret = intent.getStringExtra("secret");
+
+        String data = "otpauth://totp/" + URLEncoder.encode(label, StandardCharsets.UTF_8.name())
+                + (label.length() > 0 ? ":" : "")
+                + URLEncoder.encode(intent.getStringExtra("account"), StandardCharsets.UTF_8.name()) + "?"
+                + "issuer=" + intent.getStringExtra("issuer")
+                + "&algorithm=" + URLEncoder.encode(algorithm, StandardCharsets.UTF_8.name())
+                + "&period=" + period
+                + "&digits=" + digits
+                + "&secret=" + URLEncoder.encode(secret, StandardCharsets.UTF_8.name());
+
+        AccountStruc account = new AccountStruc(data);
+        accounts.add(new Pair<>(accounts.size(), account));
+
+        DataHelper.store(this, accounts);
     }
 
     private static class MyRunnable implements Runnable {

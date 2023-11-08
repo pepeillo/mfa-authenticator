@@ -60,19 +60,8 @@
     <string name="err_editing_account">Error editando la cuenta.</string>
     <string name="err_importing_accounts">Error importando cuentas.</string>
     <string name="err_deleting_account">Error borrando la cuenta.</string>
-
-    <string-array name="algorithms">
-        <item>SHA1</item>
-        <item>SHA256</item>
-        <item>SHA512</item>
-    </string-array>
-    <string-array name="periods">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-    </string-array>
     <string name="prompt_file">Fichero</string>
     <string name="process_ok">Proceso finalizado correctamente.</string>
     <string name="prompt_process_err">Proceso finalizado con errores.</string>
-
+    <string name="prompt_options">Opciones</string>
 </resources>

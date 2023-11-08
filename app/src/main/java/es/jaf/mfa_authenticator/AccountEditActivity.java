@@ -27,6 +27,7 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
     private Spinner spnAlgorithm;
     private Spinner spnPeriod;
     private EditText txtDigits;
+    private EditText txtSecret;
     private Switch chkFavourite;
 
     @Override
@@ -44,6 +45,7 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
         int digits = bundle.getInt("digits");
         boolean locked = bundle.getBoolean("locked");
         String secret = bundle.getString("secret");
+        boolean isNew = "NEW".equalsIgnoreCase(intent.getAction());
 
         txtLabel = findViewById(R.id.txtLabel);
         txtAccount = findViewById(R.id.txtAccount);
@@ -53,14 +55,16 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
         txtDigits = findViewById(R.id.txtDigits);
         chkFavourite = findViewById(R.id.chkFavourite);
         chkFavourite.setOnCheckedChangeListener((compoundButton, b) -> {
-            txtLabel.setEnabled(!b);
-            txtAccount.setEnabled(!b);
-            txtIssuer.setEnabled(!b);
-            spnAlgorithm.setEnabled(!b);
-            spnPeriod.setEnabled(!b);
-            txtDigits.setEnabled(!b);
+            txtLabel.setEnabled(!b || isNew);
+            txtAccount.setEnabled(!b || isNew);
+            txtIssuer.setEnabled(!b || isNew);
+            spnAlgorithm.setEnabled(!b || isNew);
+            spnPeriod.setEnabled(!b || isNew);
+            txtDigits.setEnabled(!b || isNew);
         });
-        TextView txtSecret = findViewById(R.id.txtSecret);
+        txtSecret = findViewById(R.id.txtSecret);
+
+        txtSecret.setEnabled(isNew);
 
         txtLabel.setText(label);
         txtAccount.setText(account);
@@ -131,6 +135,7 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
             intent.putExtra("period", Integer.parseInt(spnPeriod.getSelectedItem().toString()));
             intent.putExtra("digits", digits);
             intent.putExtra("locked", chkFavourite.isChecked());
+            intent.putExtra("secret", txtSecret.getText().toString());
 
             AccountEditActivity.this.setResult(Activity.RESULT_OK, intent);
             AccountEditActivity.this.finish();

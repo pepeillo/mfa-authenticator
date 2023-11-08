@@ -1,7 +1,7 @@
 <resources>
     <string-array name="create_options">
-        <item>Create from parameters</item>
-        <item>Create scanning QR code</item>
+        <item>Crear con parámetros</item>
+        <item>Crear escaneando un QR</item>
     </string-array>
 
     <string-array name="algorithms">

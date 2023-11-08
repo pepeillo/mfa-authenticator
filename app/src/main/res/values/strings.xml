@@ -65,19 +65,7 @@
     <string name="err_importing_accounts">Error importing accounts.</string>
     <string name="err_deleting_account">Error deleting account.</string>
     <string name="prompt_file">File</string>
-
-
-    <string-array name="algorithms">
-        <item>SHA1</item>
-        <item>SHA256</item>
-        <item>SHA512</item>
-    </string-array>
-    <string-array name="periods">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-    </string-array>
     <string name="process_ok">Process finished successfully.</string>
     <string name="prompt_process_err">Process finished with errors.</string>
-
+    <string name="prompt_options">Options</string>
 </resources>
