@@ -261,8 +261,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             case R.id.action_delete:
                 return deleteAccount();
             case R.id.action_edit:
-                editAccount();
-                return true;
+                return editAccount();
             default:
                 return false;
         }
@@ -394,7 +393,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    private void editAccount() {
+    private boolean editAccount() {
         AccountStruc account = nextSelection.second;
         Intent intent = new Intent(this, AccountEditActivity.class);
         intent.putExtra("label", account.getLabel());
@@ -420,6 +419,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         intent.putExtra("locked", account.isFavourite());
         intent.putExtra("secret", new String(new Base32().encode(account.getSecret())));
         startActivityForResult(intent, ACTION_EDIT);
+        return true;
     }
 
     private void saveExistingAccount(Intent intent) {
