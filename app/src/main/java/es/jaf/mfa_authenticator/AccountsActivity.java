@@ -36,16 +36,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class AccountsActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
-    private ArrayList<Pair<Integer, AccountStruc>> accounts;
-    private AccountsListAdapter adapter;
-    private FloatingActionButton floatingButton;
-
-    DragListView listView;
-
     private static final int PERMISSIONS_REQUEST_CAMERA = 42;
     private static final int ACTION_NEW = 101;
     private static final int ACTION_EDIT = 102;
     private static final int ACTION_SETTINGS = 103;
+
+    private ArrayList<Pair<Integer, AccountStruc>> accounts;
+    private AccountsListAdapter adapter;
+    private FloatingActionButton floatingButton;
+    private Pair<Integer, AccountStruc> nextSelection = null;
+
+    private DragListView listView;
     private ActionMode actionMode;
     private View viewLongClicked;
     private Handler handlerRow;
@@ -86,8 +87,6 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-    private Pair<Integer, AccountStruc> nextSelection = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
