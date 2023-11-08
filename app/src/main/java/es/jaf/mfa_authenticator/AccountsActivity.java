@@ -76,12 +76,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
                 // permission was granted
                 doScanQRCode();
             } else {
-                Snackbar.make(floatingButton, R.string.msg_camera_permission, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        super.onDismissed(snackbar, event);
-                    }
-                }).show();
+                Snackbar.make(floatingButton, R.string.msg_camera_permission, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -97,31 +92,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         setSupportActionBar(toolbar);
 
         floatingButton = findViewById(R.id.action_scan);
-        floatingButton.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(AccountsActivity.this);
-            builder.setTitle(R.string.prompt_options)
-                    .setCancelable(true)
-                    .setItems(R.array.create_options, (dialog, which) -> {
-                        if (which == 0) {
-                            Intent intent = new Intent(AccountsActivity.this, AccountEditActivity.class);
-                            intent.setAction("NEW");
-                            intent.putExtra("algorithm", 0);
-                            intent.putExtra("period", 1);
-                            intent.putExtra("digits", 6);
-                            intent.putExtra("locked", false);
-                            startActivityForResult(intent, ACTION_NEW);
-                        } else {
-                            AccountsActivity.this.scanQRCode();
-                        }
-                    });
-            Dialog dlg = builder.create();
-            Window window = dlg.getWindow();
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-            dlg.show();
-        });
+        floatingButton.setOnClickListener(view -> showFloatingOptions());
 
         try {
             accounts = DataHelper.load(this);
@@ -205,12 +176,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
                         Snackbar.make(floatingButton, R.string.msg_account_added, Snackbar.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                super.onDismissed(snackbar, event);
-                            }
-                        }).show();
+                        Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
                     }
                     break;
             }
@@ -393,6 +359,32 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
+    private void showFloatingOptions() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AccountsActivity.this);
+        builder.setTitle(R.string.prompt_options)
+                .setCancelable(true)
+                .setItems(R.array.create_options, (dialog, which) -> {
+                    if (which == 0) {
+                        Intent intent = new Intent(AccountsActivity.this, AccountEditActivity.class);
+                        intent.setAction("NEW");
+                        intent.putExtra("algorithm", 0);
+                        intent.putExtra("period", 1);
+                        intent.putExtra("digits", 6);
+                        intent.putExtra("locked", false);
+                        startActivityForResult(intent, ACTION_NEW);
+                    } else {
+                        AccountsActivity.this.scanQRCode();
+                    }
+                });
+        Dialog dlg = builder.create();
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+        dlg.show();
+    }
+
     private boolean editAccount() {
         AccountStruc account = nextSelection.second;
         Intent intent = new Intent(this, AccountEditActivity.class);
@@ -452,25 +444,18 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         alert.setTitle(getString(R.string.button_remove) + nextSelection.second.getLabel() + "?");
         alert.setMessage(R.string.msg_confirm_delete);
 
-        alert.setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                accounts.remove(nextSelection);
-                try {
-                    DataHelper.store(AccountsActivity.this, accounts);
+        alert.setPositiveButton(R.string.button_remove, (dialog, whichButton) -> {
+            accounts.remove(nextSelection);
+            try {
+                DataHelper.store(AccountsActivity.this, accounts);
 
-                    Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                        @Override
-                        public void onDismissed(Snackbar snackbar, int event) {
-                            super.onDismissed(snackbar, event);
-                        }
-                    }).show();
-                } catch (Exception e) {
-                    Utils.saveException("Deleting account.", e);
-                    Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
-                }
-                adapter.notifyDataSetChanged();
-                actionMode.finish();
+                Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
+            } catch (Exception e) {
+                Utils.saveException("Deleting account.", e);
+                Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
             }
+            adapter.notifyDataSetChanged();
+            actionMode.finish();
         });
 
         alert.setNegativeButton(R.string.button_cancel, (dialog, whichButton) -> {
@@ -536,6 +521,15 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         };
         dialog.setTitle(R.string.menu_about);
         return dialog;
+    }
+
+    private Snackbar.Callback snackCallback(){
+        return new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+            }
+        };
     }
 
     private static class MyRunnable implements Runnable {
