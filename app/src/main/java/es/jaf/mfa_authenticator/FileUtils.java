@@ -59,7 +59,6 @@ public class FileUtils {
                     final String id;
                     try (Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null)) {
                         if (cursor != null && cursor.moveToFirst()) {
-                            String fileName = cursor.getString(0);
                             String right = uri.getPath();
                             int pos = right.indexOf("/Download/");
                             right = right.substring(pos);
