@@ -380,6 +380,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         Window window = dlg.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
+        wlp.y = 150;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
         dlg.show();
