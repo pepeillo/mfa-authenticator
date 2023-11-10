@@ -23,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        SettingsActivity.this.setResult(Activity.RESULT_OK);
+        setResult(Activity.RESULT_OK);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
@@ -44,8 +44,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            SettingsActivity.this.setResult(Activity.RESULT_OK);
-            SettingsActivity.this.finish();
+            setResult(Activity.RESULT_OK);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -53,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        SettingsActivity.this.setResult(Activity.RESULT_OK);
-        SettingsActivity.this.finish();
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 }
