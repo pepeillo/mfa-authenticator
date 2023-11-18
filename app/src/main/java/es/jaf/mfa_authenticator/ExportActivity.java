@@ -12,14 +12,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -29,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ExportActivity extends AppCompatActivity {
+public class ExportActivity extends Activity {
     private View cmdExport;
     private TextView txtFile;
     private EditText txtPassword;
@@ -84,7 +82,7 @@ public class ExportActivity extends AppCompatActivity {
         if (requestCode == Utils.FILE_OR_FOLDER_PICKER_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = intent.getData();
             try {
-                String path = DocumentUtils.getPath(ExportActivity.this, uri);
+                String path = FileUtils.getFolderPath(ExportActivity.this, uri);
                 txtFile.setText(path);
                 cmdExport.setEnabled(true);
 

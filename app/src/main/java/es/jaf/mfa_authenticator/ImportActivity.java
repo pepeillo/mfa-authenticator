@@ -7,13 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ImportActivity extends AppCompatActivity {
+public class ImportActivity extends Activity {
     private View cmdImport;
     private TextView txtFile;
     private EditText txtPassword;
@@ -78,8 +78,9 @@ public class ImportActivity extends AppCompatActivity {
 
             String path = null;
             try {
-                path = FileUtils.getPath(ImportActivity.this, uri);
+                path = FileUtils.getFilePath(ImportActivity.this, uri);
             } catch (Exception e) {
+                Log.e("xxxxxxxxxx","aaaaaaaaaaaa", e);
                 e.printStackTrace();
             }
 
