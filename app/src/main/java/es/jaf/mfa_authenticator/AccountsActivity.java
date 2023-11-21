@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.woxthebox.draglistview.DragItem;
@@ -34,6 +35,7 @@ import org.apache.commons.codec.binary.Base32;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AccountsActivity extends AppCompatActivity implements  ActionMode.Callback, IAdapterEvents {
     private static final int PERMISSIONS_REQUEST_CAMERA = 42;
@@ -53,10 +55,11 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     private MyRunnable handlerTaskRow;
 
     private void doScanQRCode() {
-        new IntentIntegrator(AccountsActivity.this)
+        IntentIntegrator integrator = new IntentIntegrator(AccountsActivity.this)
                 .setCaptureActivity(CaptureActivityAnyOrientation.class)
-                .setOrientationLocked(false)
-                .initiateScan();
+                .setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(Arrays.asList(BarcodeFormat.QR_CODE.name()));
+        integrator.initiateScan();
     }
 
     private void scanQRCode() {
