@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
+    public static final int FILE_PICKER_CODE = 1;
+    public static final int FOLDER_PICKER_CODE = 2;
     public static final int FILE_OR_FOLDER_PICKER_CODE = 2;
 
     protected static SharedPreferences getEncryptedPrefs(Context appContext) throws GeneralSecurityException, IOException {
