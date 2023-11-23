@@ -43,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="Copiar el número al seleccionar la cuenta"/>
+                        android:text="@string/copyclipboard.on"/>
                 <Switch
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -127,7 +127,6 @@
                         android:text=""
                         android:minLines="2"
                         android:maxLines="5"
-                        android:background="@drawable/grey_border"
                         android:layout_weight="1"/>
             </LinearLayout>
             <LinearLayout
@@ -219,7 +218,6 @@
                         android:text=""
                         android:minLines="2"
                         android:maxLines="5"
-                        android:background="@drawable/grey_border"
                         android:layout_weight="1"/>
             </LinearLayout>
             <LinearLayout
