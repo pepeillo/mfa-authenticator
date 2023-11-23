@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AjustesActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
     private View cmdExport;
     private TextView txtFolder;
     private EditText txtPasswordExport;
@@ -42,7 +41,7 @@ public class AjustesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ajustes_activity);
+        setContentView(R.layout.settings_activity);
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean copyToClipboard =  pref.getBoolean("copy_clipboard", false);
@@ -50,7 +49,7 @@ public class AjustesActivity extends AppCompatActivity {
         Switch swCopy = findViewById(R.id.swCopy);
         swCopy.setChecked(copyToClipboard);
         swCopy.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferences pref1 = PreferenceManager.getDefaultSharedPreferences(AjustesActivity.this);
+            SharedPreferences pref1 = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
             SharedPreferences.Editor edit = pref1.edit();
             edit.putBoolean("copy_clipboard", b);
             edit.apply();
@@ -71,13 +70,13 @@ public class AjustesActivity extends AppCompatActivity {
             if (path.length() > 0) {
                 String password = txtPasswordExport.getText().toString();
                 if (password.length() == 0) {
-                    new AlertDialog.Builder(AjustesActivity.this).setTitle(R.string.app_name)
+                    new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                             .setMessage(R.string.export_to_encrypted)
                             .setCancelable(false)
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss())
                             .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                                 dialog.dismiss();
-                                AjustesActivity.this.performExport(path, password);
+                                SettingsActivity.this.performExport(path, password);
                             }).show();
                 } else {
                     performExport(path, password);
@@ -102,7 +101,7 @@ public class AjustesActivity extends AppCompatActivity {
 
         findViewById(R.id.cmdSelectFile).setOnClickListener(v -> {
             Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, AjustesActivity.this.getString(R.string.select_a_file)), Utils.FILE_PICKER_CODE);
+            startActivityForResult(Intent.createChooser(intent, SettingsActivity.this.getString(R.string.select_a_file)), Utils.FILE_PICKER_CODE);
         });
 
         cmdImport.setOnClickListener(v -> {
@@ -110,13 +109,13 @@ public class AjustesActivity extends AppCompatActivity {
             if (path.length() > 0) {
                 String password = txtPasswordImport.getText().toString();
                 if (password.length() == 0) {
-                    new AlertDialog.Builder(AjustesActivity.this).setTitle(R.string.app_name)
+                    new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                             .setMessage(R.string.import_from_encrypted)
                             .setCancelable(false)
                             .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss())
                             .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                                 dialog.dismiss();
-                                AjustesActivity.this.performImport(path, password);
+                                SettingsActivity.this.performImport(path, password);
                             }).show();
                 } else {
                     performImport(path, password);
@@ -147,11 +146,11 @@ public class AjustesActivity extends AppCompatActivity {
             Uri uri = intent.getData();
             try {
                 if (requestCode == Utils.FOLDER_PICKER_CODE) {
-                    String path = FileUtils.getFolderPath(AjustesActivity.this, uri);
+                    String path = FileUtils.getFolderPath(SettingsActivity.this, uri);
                     txtFolder.setText(path == null ? "" : path);
                     cmdExport.setEnabled(true);
                 } else if (requestCode == Utils.FILE_PICKER_CODE) {
-                    String path = FileUtils.getFilePath(AjustesActivity.this, uri);
+                    String path = FileUtils.getFilePath(SettingsActivity.this, uri);
                     txtFile.setText(path == null ? "" : path);
                     cmdImport.setEnabled(true);
                 }
@@ -165,19 +164,19 @@ public class AjustesActivity extends AppCompatActivity {
         try {
             exportFile(path, password);
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AjustesActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
             dialog.setTitle(R.string.app_name)
-                    .setMessage(AjustesActivity.this.getString(R.string.process_ok))
+                    .setMessage(SettingsActivity.this.getString(R.string.process_ok))
                     .setCancelable(false)
                     .setPositiveButton(android.R.string.ok, (dialog12, which) -> {
                         dialog12.dismiss();
-                        AjustesActivity.this.finish();
+                        SettingsActivity.this.finish();
                     });
             dialog.show();
 
         } catch (Exception e) {
             Utils.saveException("Error", e);
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AjustesActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
             dialog.setTitle(R.string.app_name)
                     .setMessage(R.string.prompt_process_err)
                     .setCancelable(false)
@@ -225,19 +224,19 @@ public class AjustesActivity extends AppCompatActivity {
         try {
             importFile(path, password);
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AjustesActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
             dialog.setTitle(R.string.app_name)
-                    .setMessage(AjustesActivity.this.getString(R.string.process_ok))
+                    .setMessage(SettingsActivity.this.getString(R.string.process_ok))
                     .setCancelable(false)
                     .setPositiveButton(android.R.string.ok, (dialog12, which) -> {
                         dialog12.dismiss();
-                        AjustesActivity.this.finish();
+                        SettingsActivity.this.finish();
                     });
             dialog.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AjustesActivity.this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
             dialog.setTitle(R.string.app_name)
                     .setMessage(R.string.prompt_process_err)
                     .setCancelable(false)
@@ -282,7 +281,7 @@ public class AjustesActivity extends AppCompatActivity {
                     }
                 }
             }
-            DataHelper.store(AjustesActivity.this, accounts);
+            DataHelper.store(SettingsActivity.this, accounts);
         } catch (Exception e) {
             Utils.saveException("Error", e);
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();

@@ -36,11 +36,9 @@
     <string name="copied_to_clipboard">Copied to clipboard.</string>
     <string name="behaviour">Behaviour</string>
     <string name="copyclipboard.title">Copy the number to clipboard</string>
-    <string name="copyclipboard.on">The number will be copied to clipboard when tap the account.</string>
-    <string name="copyclipboard.off">The number won\'t be copied to clipboard when tap the account.</string>
+    <string name="copyclipboard.on">Copy the number when tap the account.</string>
     <string name="perform_export">Export accounts to a file.</string>
     <string name="export_summary">Perform an export of all accounts now.</string>
-    <string name="category_import_export">Import / Export</string>
     <string name="perform_import">Import account from a file.</string>
     <string name="import_summary">Perform an import of accounts from a file.</string>
     <string name="cmdexport">Export</string>
@@ -64,8 +62,8 @@
     <string name="err_editing_account">Error editing account.</string>
     <string name="err_importing_accounts">Error importing accounts.</string>
     <string name="err_deleting_account">Error deleting account.</string>
-    <string name="prompt_file">File</string>
     <string name="process_ok">Process finished successfully.</string>
     <string name="prompt_process_err">Process finished with errors.</string>
     <string name="prompt_options">Options</string>
+    <string name="select_folder">Select a folder</string>
 </resources>

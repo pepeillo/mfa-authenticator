@@ -201,7 +201,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             return true;
         }
         if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(AccountsActivity.this, AjustesActivity.class), ACTION_SETTINGS);
+            startActivityForResult(new Intent(AccountsActivity.this, SettingsActivity.class), ACTION_SETTINGS);
             return true;
         }
         return super.onOptionsItemSelected(item);

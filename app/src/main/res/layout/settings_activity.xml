@@ -23,7 +23,7 @@
                     android:layout_weight="1"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_blue_dark"
-                    android:text="Comportamiento"/>
+                    android:text="@string/behaviour"/>
 
             <TextView
                     android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                     android:layout_weight="1"
                     android:textAppearance="@android:style/TextAppearance.Small"
                     android:textStyle="italic"
-                    android:text="Copiar el número al Portapapeles"/>
+                    android:text="@string/copyclipboard.title"/>
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="Carpeta"/>
+                        android:text="@string/select_folder"/>
                 <Button
                         android:text="..."
                         android:layout_width="48dp"

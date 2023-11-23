@@ -35,11 +35,9 @@
     <string name="copied_to_clipboard">Copiado al portapapeles.</string>
     <string name="behaviour">Comportamiento</string>
     <string name="copyclipboard.title">Copiar el número al portapapeles</string>
-    <string name="copyclipboard.on">El número se copiará al portapapeles cuando se seleccione la cuenta.</string>
-    <string name="copyclipboard.off">El número no se copiará al portapapeles cuando se seleccione la cuenta.</string>
+    <string name="copyclipboard.on">Copiar el número al seleccionar la cuenta.</string>
     <string name="perform_export">Export las cuentas a un fichero.</string>
     <string name="export_summary">Realizar una exportación de todas las cuentas ahora.</string>
-    <string name="category_import_export">Importación / Exportación</string>
     <string name="perform_import">Importar las cuentas de un fichero.</string>
     <string name="import_summary">Realizar una importación de las cuentas de un fichero.</string>
     <string name="cmdexport">Exportar</string>
@@ -60,8 +58,8 @@
     <string name="err_editing_account">Error editando la cuenta.</string>
     <string name="err_importing_accounts">Error importando cuentas.</string>
     <string name="err_deleting_account">Error borrando la cuenta.</string>
-    <string name="prompt_file">Fichero</string>
     <string name="process_ok">Proceso finalizado correctamente.</string>
     <string name="prompt_process_err">Proceso finalizado con errores.</string>
     <string name="prompt_options">Opciones</string>
+    <string name="select_folder">Selecciona una carpeta</string>
 </resources>

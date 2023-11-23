@@ -34,7 +34,7 @@
             android:label="@string/menu_edit"
             android:theme="@style/AppTheme" />
         <activity
-                android:name=".AjustesActivity"
+                android:name=".SettingsActivity"
                 android:label="@string/settings"
                 android:theme="@style/AppTheme" />
         <activity
