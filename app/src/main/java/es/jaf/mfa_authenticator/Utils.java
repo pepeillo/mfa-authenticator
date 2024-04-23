@@ -48,7 +48,7 @@ public class Utils {
         File dir;
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
-            dir = new File(root.getAbsolutePath() + "/" + BuildConfig.APPLICATION_ID);
+            dir = new File(root.getAbsolutePath() + "/Download/es.jaf.logs/" + BuildConfig.APPLICATION_ID);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
                     return;
