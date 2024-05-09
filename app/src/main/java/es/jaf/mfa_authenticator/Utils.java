@@ -48,7 +48,7 @@ public class Utils {
         File dir;
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
-            dir = new File(root.getAbsolutePath() + "/Download/es.jaf/logs/" + BuildConfig.APPLICATION_ID);
+            dir = new File(root.getAbsolutePath() + "/Download/es.jaf/logs/");
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
                     return;
@@ -57,7 +57,7 @@ public class Utils {
         } catch (Exception e) {
             return;
         }
-        File file = new File(dir, "exceptions.txt");
+        File file = new File(dir, BuildConfig.APPLICATION_ID + ".txt");
         try (FileOutputStream fos = new FileOutputStream(file, true); PrintWriter pw = new PrintWriter(fos)) {
             pw.println(sdf.format(new Date()) + "\t" + text);
             if (ex != null) {
