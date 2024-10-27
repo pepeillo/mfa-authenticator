@@ -79,7 +79,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
                 // permission was granted
                 doScanQRCode();
             } else {
-                Snackbar.make(floatingButton, R.string.msg_camera_permission, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
+                Snackbar.make(floatingButton, R.string.msg_camera_permission, Snackbar.LENGTH_LONG).addCallback(snackCallback()).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -107,10 +107,6 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         listView = findViewById(R.id.listView);
         listView.getRecyclerView().setVerticalScrollBarEnabled(true);
         listView.setDragListListener(new DragListView.DragListListenerAdapter() {
-            @Override
-            public void onItemDragStarted(int position) {
-            }
-
             @Override
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 if (fromPosition != toPosition) {
@@ -179,7 +175,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
                         Snackbar.make(floatingButton, R.string.msg_account_added, Snackbar.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
+                        Snackbar.make(floatingButton, getResources().getString(R.string.msg_invalid_qr_code) + " " + e, Snackbar.LENGTH_LONG).addCallback(snackCallback()).show();
                     }
                     break;
             }
@@ -226,22 +222,21 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
     public boolean onActionItemClicked(final ActionMode actionMode, MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        switch (id) {
-            case R.id.action_delete:
-                deleteAccount();
-                return true;
-            case R.id.action_edit:
-                editAccount();
-                return true;
-            default:
-                return false;
+        if (R.id.action_delete == id) {
+            deleteAccount();
+            return true;
         }
+        if (R.id.action_edit == id) {
+            editAccount();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
         if (this.viewLongClicked != null) {
-            this.viewLongClicked.setBackground(getResources().getDrawable(R.drawable.row_unselected));
+            this.viewLongClicked.setBackground(getResources().getDrawable(R.drawable.row_unselected, getTheme()));
         }
         this.viewLongClicked = null;
         this.actionMode = null;
@@ -302,7 +297,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
                 progressBar.setProgress(max - (progress * 100 *30/period));
                 progressBar.setSecondaryProgress(max - counter); //***100
-                txtCount.setText("" + (period - progress));
+                txtCount.setText(String.valueOf(period - progress));
                 counter = counter + 20;
 
                 if (counter >= 3000 || interrupted) { //***30
@@ -329,7 +324,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
 
         nextSelection = accounts.get(position);
         viewLongClicked = view;
-        view.setBackground(getResources().getDrawable(R.drawable.row_selected));
+        view.setBackground(getResources().getDrawable(R.drawable.row_selected, getTheme()));
         actionMode = startActionMode(AccountsActivity.this);
         return true;
     }
@@ -454,7 +449,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
             try {
                 DataHelper.store(AccountsActivity.this, accounts);
 
-                Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).setCallback(snackCallback()).show();
+                Snackbar.make(floatingButton, R.string.msg_account_removed, Snackbar.LENGTH_LONG).addCallback(snackCallback()).show();
             } catch (Exception e) {
                 Utils.saveException("Deleting account.", e);
                 Snackbar.make(floatingButton, R.string.err_deleting_account, Snackbar.LENGTH_LONG).show();
@@ -479,7 +474,7 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
         String secret = intent.getStringExtra("secret");
 
         String data = "otpauth://totp/" + URLEncoder.encode(label, StandardCharsets.UTF_8.name())
-                + (label.length() > 0 ? ":" : "")
+                + (!label.isEmpty() ? ":" : "")
                 + URLEncoder.encode(intent.getStringExtra("account"), StandardCharsets.UTF_8.name()) + "?"
                 + "issuer=" + intent.getStringExtra("issuer")
                 + "&algorithm=" + URLEncoder.encode(algorithm, StandardCharsets.UTF_8.name())
@@ -500,7 +495,8 @@ public class AccountsActivity extends AppCompatActivity implements  ActionMode.C
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.about_dialog);
 
-                ((TextView)findViewById(R.id.txtappname)).setText(getText(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
+                String text = getText(R.string.app_name) + " " + BuildConfig.VERSION_NAME;
+                ((TextView)findViewById(R.id.txtappname)).setText(text);
                 findViewById(R.id.bierbaumer).setOnClickListener(view -> {
                     Uri uri = Uri.parse("https://github.com/0xbb");
                     startActivity(new Intent(Intent.ACTION_VIEW, uri));

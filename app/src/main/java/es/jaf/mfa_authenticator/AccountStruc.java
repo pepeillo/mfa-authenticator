@@ -43,13 +43,13 @@ public class AccountStruc {
         }
 
         String tmp = uri.getQueryParameter("secret");
-        if (tmp == null || tmp.length() == 0) {
+        if (tmp == null || tmp.isEmpty()) {
             throw new Exception("Invalid Secret.");
         }
         this.secret = new Base32().decode(tmp.toUpperCase());
 
         algorithm = uri.getQueryParameter("algorithm");
-        if (algorithm == null || algorithm.length() == 0) {
+        if (algorithm == null || algorithm.isEmpty()) {
             algorithm = "SHA1"; //throw new Exception("Invalid algorithm.");
         }
 

@@ -42,7 +42,7 @@ public class TOTPHelper {
             }
 
             truncatedHash &= 0x7FFFFFFF;
-            truncatedHash %= Math.pow(10,digits);
+            truncatedHash %= (long) Math.pow(10, digits);
 
             result  = (int) truncatedHash;
         } catch(Exception e){

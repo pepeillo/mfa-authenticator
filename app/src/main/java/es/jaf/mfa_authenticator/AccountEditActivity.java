@@ -71,7 +71,7 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
         txtIssuer.setText(issuer);
         spnAlgorithm.setSelection(algorithm);
         spnPeriod.setSelection(period);
-        txtDigits.setText("" + digits);
+        txtDigits.setText(String.valueOf(digits));
         chkFavourite.setChecked(locked);
         txtSecret.setText(secret);
 
@@ -158,7 +158,7 @@ public class AccountEditActivity extends AppCompatActivity implements  ActionMod
 
         try {
             String data = "otpauth://totp/" + URLEncoder.encode(label, StandardCharsets.UTF_8.name())
-                    + (label.length() > 0 ? ":" : "")
+                    + (!label.isEmpty() ? ":" : "")
                     + URLEncoder.encode(account, StandardCharsets.UTF_8.name()) + "?"
                     + "issuer=" + issuer
                     + "&algorithm=" + URLEncoder.encode(spnAlgorithm.getSelectedItem().toString(), StandardCharsets.UTF_8.name())

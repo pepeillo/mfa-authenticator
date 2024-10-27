@@ -36,7 +36,7 @@ public class FileUtils {
                 final String[] split = docId.split(":");
 
                 String fullPath = getPathFromExtSD(split);
-                if (fullPath.length() > 0) {
+                if (!fullPath.isEmpty()) {
                     return fullPath;
                 }
                 return null;
@@ -49,13 +49,13 @@ public class FileUtils {
                         int pos = right.indexOf("/Download/");
                         right = right.substring(pos);
                         String path = Environment.getExternalStorageDirectory().toString() + right; //"/Download/" + fileName;
-                        if (path.length() > 0) {
+                        if (!path.isEmpty()) {
                             return path;
                         }
                     }
                 }
                 id = DocumentsContract.getDocumentId(uri);
-                if (id != null && id.length() > 0) {
+                if (id != null && !id.isEmpty()) {
                     if (id.startsWith("raw:")) {
                         return id.replaceFirst("raw:", "");
                     }

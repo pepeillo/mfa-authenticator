@@ -67,9 +67,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         cmdExport.setOnClickListener(v -> {
             String path = txtFolder.getText().toString();
-            if (path.length() > 0) {
+            if (!path.isEmpty()) {
                 String password = txtPasswordExport.getText().toString();
-                if (password.length() == 0) {
+                if (password.isEmpty()) {
                     new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                             .setMessage(R.string.export_to_encrypted)
                             .setCancelable(false)
@@ -106,9 +106,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         cmdImport.setOnClickListener(v -> {
             String path = txtFile.getText().toString();
-            if (path.length() > 0) {
+            if (!path.isEmpty()) {
                 String password = txtPasswordImport.getText().toString();
-                if (password.length() == 0) {
+                if (password.isEmpty()) {
                     new AlertDialog.Builder(SettingsActivity.this).setTitle(R.string.app_name)
                             .setMessage(R.string.import_from_encrypted)
                             .setCancelable(false)
@@ -142,6 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
             Uri uri = intent.getData();
             try {
@@ -155,7 +156,7 @@ public class SettingsActivity extends AppCompatActivity {
                     cmdImport.setEnabled(true);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -186,7 +187,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void exportFile(String path, String password) throws Exception {
-        boolean hasPassword = password != null && password.length() > 0;
+        boolean hasPassword = password != null && !password.isEmpty();
 
         JSONArray arr = new JSONArray();
         ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
@@ -235,7 +236,6 @@ public class SettingsActivity extends AppCompatActivity {
             dialog.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
             AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
             dialog.setTitle(R.string.app_name)
                     .setMessage(R.string.prompt_process_err)
@@ -250,7 +250,7 @@ public class SettingsActivity extends AppCompatActivity {
         ZipInputStream zis = null;
         try {
             ArrayList<Pair<Integer, AccountStruc>> accounts = DataHelper.load(this);
-            if (password == null || password.length() == 0) {
+            if (password == null || password.isEmpty()) {
                 zis = new ZipInputStream(new FileInputStream(tmpFile));
             } else {
                 zis = new ZipInputStream(new FileInputStream(tmpFile), password.toCharArray());
