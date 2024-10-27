@@ -43,8 +43,6 @@ public class Utils {
     }
 
     static void saveException(String text, Exception ex) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
         File dir;
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
@@ -57,11 +55,13 @@ public class Utils {
         } catch (Exception e) {
             return;
         }
+
+        String now = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
         File file = new File(dir, BuildConfig.APPLICATION_ID + ".txt");
         try (FileOutputStream fos = new FileOutputStream(file, true); PrintWriter pw = new PrintWriter(fos)) {
-            pw.println(sdf.format(new Date()) + "\t" + text);
+            pw.println(now + "\t" + text);
             if (ex != null) {
-                pw.println(sdf.format(new Date()) + "\t" + "Message:" + ex.getMessage());
+                pw.println(now + "\t" + "Message:" + ex.getMessage());
                 ex.printStackTrace(pw);
             }
             pw.flush();
