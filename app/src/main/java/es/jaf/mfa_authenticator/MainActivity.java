@@ -2,6 +2,7 @@ package es.jaf.mfa_authenticator;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Process;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.concurrent.Executor;
 
@@ -23,24 +25,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        BiometricManager biometricManager = BiometricManager.from(this);
-        int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean useBiometric =  pref.getBoolean("use_biometric", false);
 
-        if (!(canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS)) {
-            Toast.makeText(this, "No tienes autenticación biométrica.", Toast.LENGTH_LONG).show();
-            return;
+        if (useBiometric) {
+            BiometricManager biometricManager = BiometricManager.from(this);
+            int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+
+            if (!(canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS)) {
+                Toast.makeText(this, "No tienes autenticación biométrica.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "No tiene los permisios necesarios.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            findViewById(R.id.cmdbiometrics).setOnClickListener(view -> withBiometric());
+            withBiometric();
+        } else {
+            startActivity(new Intent(getApplicationContext(), AccountsActivity.class));
+            finish();
         }
-
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED ) {
-            Toast.makeText(this, "No tiene los permisios necesarios.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        findViewById(R.id.cmdbiometrics).setOnClickListener(view -> withBiometric());
-        withBiometric();
     }
 
 

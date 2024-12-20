@@ -45,6 +45,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean copyToClipboard =  pref.getBoolean("copy_clipboard", false);
+        boolean useBiometric =  pref.getBoolean("use_biometric", false);
+
+        Switch swBiometric = findViewById(R.id.swBiometric);
+        swBiometric.setChecked(useBiometric);
+        swBiometric.setOnCheckedChangeListener((compoundButton, b) -> {
+            SharedPreferences pref1 = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+            SharedPreferences.Editor edit = pref1.edit();
+            edit.putBoolean("use_biometric", b);
+            edit.apply();
+            edit.commit();
+        });
 
         Switch swCopy = findViewById(R.id.swCopy);
         swCopy.setChecked(copyToClipboard);

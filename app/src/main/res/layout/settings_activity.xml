@@ -23,6 +23,52 @@
                     android:layout_weight="1"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_blue_dark"
+                    android:text="@string/security"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textStyle="italic"
+                    android:text="@string/usebiometric.title"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/usebiometric.on"/>
+                <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/swBiometric"/>
+            </LinearLayout>
+        </LinearLayout>
+    </TableRow>
+
+    <TableRow
+            android:padding="10dp"
+            android:background="@drawable/grey_border"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:text="@string/behaviour"/>
 
             <TextView
@@ -57,7 +103,7 @@
             android:background="@drawable/grey_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="20dp">
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +194,7 @@
             android:background="@drawable/grey_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="20dp">
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
